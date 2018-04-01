@@ -1,0 +1,23 @@
+.catalogs-column{
+    background-color: #f8f8f8;
+    height: 100vh;
+    font-family: sans-serif;
+    border-right: 1px solid #e7e7e7;;
+}
+.catalogs-item{
+    height: 40px;
+    background-color: #f8f8f8;
+
+    font-size: 16px;
+    padding: 12px 0 0 12px;
+}
+.catalogs-item:hover{
+    background-color: #ccc;
+    cursor: pointer;
+}
+
+.items-background{
+    background-color: #eee;
+    height: 100vh;
+    padding: 10px;
+}
