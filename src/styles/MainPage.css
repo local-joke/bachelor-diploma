@@ -1,6 +1,6 @@
 .catalogs-column{
     background-color: #f8f8f8;
-    height: 100vh;
+    height: 94.5vh;
     font-family: sans-serif;
     border-right: 1px solid #e7e7e7;;
 }
@@ -18,6 +18,12 @@
 
 .items-background{
     background-color: #eee;
-    height: 100vh;
+    height: 94.5vh;
     padding: 10px;
+}
+
+.container{
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
 }

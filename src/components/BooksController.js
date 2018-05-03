@@ -18,6 +18,7 @@ import {
     ControlLabel
 } from 'react-bootstrap'
 import '../styles/notes.css'
+//import {CSSTransitionGroup} from 'react-transition-group'
 
 class BookViewModal extends Component {
     constructor(props) {
@@ -45,13 +46,13 @@ class BookViewModal extends Component {
     render(){
         return <Modal show={this.state.show} size={this.props.size} onHide={this.handleClose}>
             <Modal.Body style={{height: '400px'}}>
-            <div style={{position: 'relative', height: '100%'}}>
-                {this.state.book && <ReactReader
-                    url={this.state.book.URL}
-                    title={this.state.book.Title}
-                    locationChanged={(epubcifi) => console.log(epubcifi)}
-                />}
-            </div>
+                <div style={{position: 'relative', height: '100%'}}>
+                    {this.state.book && <ReactReader
+                        url={this.state.book.URL}
+                        title={this.state.book.Title}
+                        locationChanged={(epubcifi) => console.log(epubcifi)}
+                    />}
+                </div>
             </Modal.Body>
         </Modal>
     }
@@ -66,7 +67,7 @@ export default class NotesController extends Component {
             books: [
                 {
                     Id: 0,
-                    CatalogId: 1,
+                    CatalogId: 2,
                     Title: 'Alice in wonderland',
                     Date: '2012-12-1',
                     URL: 'https://s3-eu-west-1.amazonaws.com/react-reader/alice.epub'
@@ -139,16 +140,21 @@ export default class NotesController extends Component {
                 </Panel>
             </Row>
             <Row>
-                {this.state.books.map((book, key) => {
-                    let previewText = (book.Title.length > 40) ? book.Title.substr(0, 38) + '...' : book.Title
-                    return <div key={key} className="book-container">
-                        <div className="book-left-part">
+                {/*<CSSTransitionGroup
+                    transitionName="example"
+                    transitionEnterTimeout={500}
+                    transitionLeaveTimeout={300}>*/}
+                    {this.state.books.map((book, key) => {
+                        let previewText = (book.Title.length > 40) ? book.Title.substr(0, 38) + '...' : book.Title
+                        return <div key={key} className="book-container">
+                            <div className="book-left-part">
+                            </div>
+                            <div key={key} className="book" onClick={() => this.openModal(book)}>
+                                {previewText}
+                            </div>
                         </div>
-                    <div key={key} className="book" onClick={() => this.openModal(book)}>
-                        {previewText}
-                    </div>
-                    </div>
-                })}
+                    })}
+                {/*</CSSTransitionGroup>*/}
             </Row>
             <BookViewModal
                 size="large"
