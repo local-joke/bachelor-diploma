@@ -17,17 +17,22 @@ import {
     Checkbox,
     ControlLabel
 } from 'react-bootstrap'
-import '../styles/notes.css'
+import '../../styles/notes.css'
 import moment from 'moment'
 import axios from 'axios'
 import {connect} from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { fetchNotes } from '../redux/actions/index'
-
-
-//import {CSSTransitionGroup} from 'react-transition-group'
-
-class NoteModal extends Component {
+import {bindActionCreators} from 'redux'
+import {
+    fetchNotes,
+    getCurrentNote,
+    clearCurrentNote,
+    postNote
+} from '../../redux/actions/index'
+import {withRouter} from 'react-router-dom'
+import {Field, reduxForm} from 'redux-form'
+import {noteFields} from "./noteFields"
+import NoteModal from './NoteModal'
+/*class NoteModal extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -112,7 +117,8 @@ class NoteModal extends Component {
             </Modal.Footer>
         </Modal>
     }
-}
+}*/
+
 /*[
     {
         Id: 0,
@@ -140,72 +146,30 @@ class NotesController extends Component {
         super(props)
         console.log('WOW CONSTRUCTOR')
         this.state = {
-            idCounter: 2,
-            notes: []
+            showModal: false,
         }
-        this.addNote = this.addNote.bind(this);
-        this.clearNote = this.clearNote.bind(this)
-        this.editNote = this.editNote.bind(this)
-        this.noteClick = React.createRef();
+        this.addNoteHandleSubmit = this.addNoteHandleSubmit.bind(this);
+        this.openModal = this.openModal.bind(this)
+        this.closeModal = this.closeModal.bind(this)
     }
 
-    setIsImportant(noteId) {
-        let notes = this.state.notes
-        notes.map((note) => {
-            if (note.id === noteId) {
-                note.IsImportant = !note.IsImportant
-            }
-        })
+    openModal(noteId) {
+        this.props.getCurrentNote(noteId)
         this.setState({
-            notes: notes
+            showModal: true
         })
     }
 
-    addNote() {
-        let newNote = {
-            id: this.state.idCounter,
-            CatalogId: 1,
-            Header: this.noteHeader.value,
-            Text: this.noteText.value,
-            IsImportant: this.checkbox.value,
-            DateOfCreation: moment(),
-            DateOfEditing: null,
-        }
-        let notes = this.state.notes
-        notes.push(newNote)
+    closeModal() {
+        this.props.clearCurrentNote()
         this.setState({
-            idCounter: this.state.idCounter++,
-            notes: notes,
+            showModal: false
         })
-        this.noteHeader.value = ''
-        this.noteText.value = ''
-    }
-
-    editNote(editedNote) {
-        this.notesModal.handleClose()
-        let notes = this.state.notes
-        notes.map((note, i) => {
-            if (note.Id === editedNote.Id) {
-                notes.splice(i, 1, editedNote)
-            }
-        })
-        this.setState({
-            notes: notes
-        })
-    }
-
-    clearNote() {
-        this.noteHeader.value = ''
-        this.noteText.value = ''
-    }
-
-    openModal(note) {
-        this.notesModal.handleShow(note)
     }
 
     importantExists() {
         let exists = false
-        this.props.notes.forEach((note) => {
+        this.props.notes && this.props.notes.forEach((note) => {
             if (note.IsImportant) {
                 exists = true
             }
@@ -215,7 +179,7 @@ class NotesController extends Component {
 
     isEverythingImportant() {
         let check = true
-        this.props.notes.forEach((note) => {
+        this.props.notes && this.props.notes.forEach((note) => {
             if (!note.IsImportant) {
                 check = false
             }
@@ -223,53 +187,66 @@ class NotesController extends Component {
         return check
     }
 
-    componentDidMount(){
+    addNoteHandleSubmit(values) {
+        let body = {
+            id: 0,
+            idCreator: 1,//this.props.currentUser.profile.Id
+            IsImportant: values.IsImportant,
+            DateOfCreation: moment(),
+            DateOfChange: null,
+            HeaderText: values.HeaderText,
+            NoteText: values.NoteText
+        }
+        console.log('SUBMIT BODY', body)
+        this.props.postNote(body)
+    }
+
+  /*  componentWillReceiveProps(prevProps){
+        if(prevProps.notes.items !== this.props.notes.items){
+            console.log('DID UPDATE', this.props.notes.items)
+            this.props.fetchNotes()
+        }
+    }*/
+
+    componentDidMount() {
         this.props.fetchNotes()
     }
 
     render() {
-        console.log(this.props.notes)
+
+        const {handleSubmit, pristine, reset, submitting} = this.props
         return <Col xs={12}>
             <Row>
-                <Panel id="collapsible-panel-example-2">
-                    <Panel.Heading style={{backgroundColor: 'white'}}>
-                        <Panel.Title toggle>
-                            Создать заметку
-                        </Panel.Title>
-                    </Panel.Heading>
-                    <Panel.Collapse>
-                        <Panel.Body>
-                            <FormGroup>
-                                <ControlLabel>Название</ControlLabel>
-                                <FormControl
-                                    id="formControlsText"
-                                    type="text"
-                                    inputRef={(input) => this.noteHeader = input}
-                                    label="Text"
-                                    placeholder="Введите название..."/>
-                            </FormGroup>
-                            <FormGroup controlId="formControlsTextarea">
-                                <ControlLabel>Текст</ControlLabel>
-                                <FormControl
-                                    inputRef={(input) => this.noteText = input}
-                                    componentClass="textarea"
-                                    placeholder="Введите текст"/>
-                            </FormGroup>
-                            <Checkbox inputRef={ref => this.checkbox = ref}>
-                                Важная
-                            </Checkbox>
-                        </Panel.Body>
-                        <Panel.Footer style={{textAlign: 'right', backgroundColor: 'white'}}>
-                            <Button style={{marginRight: '5px'}} onClick={this.clearNote}>Очистить</Button>
-                            <Button onClick={this.addNote}>Сохранить</Button>
-                        </Panel.Footer>
-                    </Panel.Collapse>
-                </Panel>
+                <form onSubmit={this.props.handleSubmit(this.addNoteHandleSubmit)}>
+                    <Panel id="collapsible-panel-example-2" defaultExpanded>
+                        <Panel.Heading style={{backgroundColor: 'white'}}>
+                            <Panel.Title toggle>
+                                Создать заметку
+                            </Panel.Title>
+                        </Panel.Heading>
+                        <Panel.Collapse>
+                            <Panel.Body>
+                                {noteFields()}
+                            </Panel.Body>
+                            <Panel.Footer style={{textAlign: 'right', backgroundColor: 'white'}}>
+                                <Button type="button" disabled={pristine || submitting} onClick={reset}>
+                                    Очистить
+                                </Button>
+                                <Button style={{marginRight: '5px'}} type="submit" disabled={pristine || submitting}>
+                                    Сохранить
+                                </Button>
+                                {/*<Button style={{marginRight: '5px'}} onClick={this.clearNote}>Очистить</Button>
+                                <Button onClick={this.addNote}>Сохранить</Button>*/}
+                            </Panel.Footer>
+                        </Panel.Collapse>
+                    </Panel>
+                </form>
             </Row>
-            {/*<CSSTransitionGroup
-                transitionName="example"
-                transitionEnterTimeout={500}
-                transitionLeaveTimeout={300}>*/}
+            {/*<CSSTransition
+                timeout={300}
+              classNames="example"
+              unmountOnExit
+              >*/}
             {(this.importantExists()) && <Row>
                 <ControlLabel>Важные</ControlLabel>
                 <div>
@@ -278,7 +255,7 @@ class NotesController extends Component {
                             let previewText = (note.NoteText.length > 50) ? note.NoteText.substr(0, 48) + '...' : note.NoteText
                             return <div key={key}
                                         className="note-important">
-                                <div onClick={() => this.openModal(note)}
+                                <div onClick={() => this.openModal(note.id)}
                                      ref={this.noteClick}>
                                     {previewText}
                                 </div>
@@ -286,13 +263,13 @@ class NotesController extends Component {
                                     glyph="paperclip"
                                     bsSize="large"
                                     className="paperclip"
-                                    onClick={() => this.setIsImportant(note.Id)}/>
+                                    onClick={() => this.setIsImportant(note.id)}/>
                             </div>
                         }
                     })}
                 </div>
             </Row>}
-            {/*</CSSTransitionGroup>*/}
+            {/*</CSSTransition>*/}
             <Row>
                 {!this.isEverythingImportant() &&
                 <div>
@@ -301,43 +278,53 @@ class NotesController extends Component {
                         transitionName="example"
                         transitionEnterTimeout={500}
                         transitionLeaveTimeout={300}>*/}
-                        <div>
-                    {this.props.notes && this.props.notes.map((note, key) => {
-                        if (!note.IsImportant) {
-                            let previewText = (note.NoteText.length > 50) ? note.NoteText.substr(0, 48) + '...' : note.NoteText
-                            return <div key={key}
-                                        className="note">
-                                <div onClick={() => this.openModal(note)}>
-                                    {previewText}
+                    <div>
+                        {this.props.notes && this.props.notes.map((note, key) => {
+                            if (!note.IsImportant) {
+                                let previewText = (note.NoteText.length > 50) ? note.NoteText.substr(0, 48) + '...' : note.NoteText
+                                return <div key={key}
+                                            className="note">
+                                    <div onClick={() => this.openModal(note.id)}>
+                                        {previewText}
+                                    </div>
+                                    <Glyphicon glyph="paperclip" bsSize="large"
+                                               onClick={() => this.setIsImportant(note.id)}
+                                               className="paperclip"/>
                                 </div>
-                                <Glyphicon glyph="paperclip" bsSize="large"
-                                           onClick={() => this.setIsImportant(note.Id)}
-                                           className="paperclip"/>
-                            </div>
-                        }
-                    })}
-                        </div>
+                            }
+                        })}
+                    </div>
                     {/*</CSSTransitionGroup>*/}
                 </div>
                 }
             </Row>
             <NoteModal
-                editNote={this.editNote}
+                showModal={this.state.showModal}
+                modalCloseHandler={this.closeModal}
                 size="large"
-                ref={c => this.notesModal = c}
             />
         </Col>
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({fetchNotes}, dispatch)
+    return bindActionCreators({
+        fetchNotes,
+        getCurrentNote,
+        clearCurrentNote,
+        postNote
+    }, dispatch)
 }
 
 function mapStateToProps(state) {
     return {
-        notes: state.items
+        notes: state.notes.items
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NotesController)
+NotesController = reduxForm({
+    // a unique name for the form
+    form: 'createNoteForm'
+})(NotesController)
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NotesController))
