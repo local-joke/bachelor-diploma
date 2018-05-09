@@ -18,8 +18,10 @@
 
 .items-background{
     background-color: #eee;
-    height: 94.5vh;
+    max-height: 94.5vh;
     padding: 10px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .container{

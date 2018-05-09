@@ -5,10 +5,16 @@ import {
 } from 'react-bootstrap'
 import '../../styles/notes.css'
 import {connect} from 'react-redux'
-import {withRouter} from 'react-router-dom'
 import {reduxForm} from 'redux-form'
 import {noteFields} from "./noteFields"
+import {bindActionCreators} from 'redux'
 import moment from 'moment'
+import {
+    //api
+    deleteNote,
+    editNote,
+} from '../../redux/actions/notes'
+import { deleteMethod, putMethod } from '../../api/index'
 
 class NoteModal extends Component {
     constructor(props) {
@@ -16,9 +22,11 @@ class NoteModal extends Component {
 
         this.handleHide = this.handleHide.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.deleteNote = this.deleteNote.bind(this)
     }
 
     handleHide() {
+        this.props.reset()
         this.props.clearFields('noteForm')
         this.props.modalCloseHandler();
     }
@@ -26,16 +34,23 @@ class NoteModal extends Component {
     handleSubmit(values) {
         let body = {
             id: values.id,
-            //idCreator: this.props.currentUser.profile.Id,
-            IsImportant: values.IsImportant,
+            idCreator: 1, //idCreator: this.props.currentUser.profile.Id,
+            IsImportant: values.IsImportant ? 1 : 0,
             DateOfCreation: values.DateOfCreation,
-            DateOfChange: moment(),
+            DateOfChange: moment().format('YYYY-MM-DD HH:MM:SS'),
             HeaderText: values.HeaderText,
             NoteText: values.NoteText
         }
         console.log(body)
+        this.props.putMethod(editNote, body)
         this.props.modalCloseHandler()
     }
+
+    deleteNote(){
+        this.props.deleteMethod(deleteNote, this.props.initialValues.id)
+        this.props.modalCloseHandler()
+    }
+
     render() {
         const {
             handleSubmit, pristine, submitting, invalid,
@@ -49,9 +64,17 @@ class NoteModal extends Component {
             </Modal.Body>
             <Modal.Footer>
                 <Button
+                    style={{marginLeft: '5px', float: 'left'}}
+                    type="button"
+                    bsStyle='danger'
+                    onClick={this.deleteNote}
+                >
+                    Удалить
+                </Button>
+                <Button
                     type="button"
                     disabled={pristine || submitting}
-                    bsStyle='danger'
+                    bsStyle='default'
                     onClick={this.handleHide}
                 >
                     Отменить
@@ -59,7 +82,7 @@ class NoteModal extends Component {
                 <Button
                     type="submit"
                     disabled={pristine || invalid || submitting}
-                    bsStyle='primary'
+                    bsStyle='success'
                 >
                     Сохранить
                 </Button>
@@ -67,6 +90,13 @@ class NoteModal extends Component {
             </form>
         </Modal>
     }
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        putMethod,
+        deleteMethod,
+    }, dispatch)
 }
 
 NoteModal = reduxForm({
@@ -77,7 +107,7 @@ NoteModal = reduxForm({
 
 NoteModal = connect( state => ({
     initialValues: state.notes.currentNote
-}))((NoteModal))
+}), mapDispatchToProps )((NoteModal))
 
 export default NoteModal
 

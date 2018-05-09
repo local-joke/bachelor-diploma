@@ -1,146 +1,33 @@
 import React, {Component} from 'react';
 import {
-    Grid,
     Col,
     Row,
     Button,
-    Nav,
-    NavItem,
-    Navbar,
-    NavDropdown,
-    MenuItem,
     Glyphicon,
-    Modal,
-    FormGroup,
-    FormControl,
-    Panel,
-    Checkbox,
-    ControlLabel
+    ControlLabel,
+    Panel
 } from 'react-bootstrap'
 import '../../styles/notes.css'
 import moment from 'moment'
-import axios from 'axios'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import {
-    fetchNotes,
+    //api
+    getNotes,
+    addNote,
+    deleteNote,
+    //non-api
     getCurrentNote,
     clearCurrentNote,
-    postNote
-} from '../../redux/actions/index'
+} from '../../redux/actions/notes'
+import {getMethod, postMethod, deleteMethod} from '../../api/index'
 import {withRouter} from 'react-router-dom'
-import {Field, reduxForm} from 'redux-form'
+import { reduxForm} from 'redux-form'
 import {noteFields} from "./noteFields"
 import NoteModal from './NoteModal'
-/*class NoteModal extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            id: 0,
-            noteHeader: '',
-            noteText: '',
-            isImportant: '',
-            dateOfCreation: moment(),
-            show: false
-        }
-        this.handleClose = this.handleClose.bind(this)
-        this.handleChangeHeader = this.handleChangeHeader.bind(this)
-        this.handleChangeText = this.handleChangeText.bind(this)
-    }
 
-    handleClose() {
-        this.setState({show: false});
-    }
+import {CSSTransition} from 'react-transition-group'
 
-    handleChangeHeader(e) {
-        this.setState({
-            noteHeader: e.target.value
-        })
-    }
-
-    handleChangeText(e) {
-        this.setState({
-            noteText: e.target.value
-        })
-    }
-
-    handleShow(note) {
-        console.log(note)
-        this.setState({
-            id: note.id,
-            noteHeader: note.HeaderText,
-            noteText: note.NoteText,
-            dateOfCreation: note.DateOfCreation,
-            isImportant: note.IsImportant,
-            show: true,
-        });
-    }
-
-    getNote() {
-        return {
-            id: this.state.id,
-            CatalogId: 1,
-            Header: this.state.noteHeader,
-            IsImportant: this.state.isImportant,
-            DateOfCreation: '2012-12-1',
-            DateOfEditing: moment(),
-            Text: this.state.noteText
-        }
-    }
-
-    render() {
-        return <Modal show={this.state.show} size={this.props.size} onHide={this.handleClose} className="note-modal">
-            <Modal.Body style={{height: '400px'}}>
-                <FormGroup>
-                    <ControlLabel>Название</ControlLabel>
-                    <FormControl
-                        id="formControlsText"
-                        type="text"
-                        value={this.state.noteHeader}
-                        label="Text"
-                        onChange={this.handleChangeHeader}
-                        placeholder="Введите название..."/>
-                </FormGroup>
-                <FormGroup controlId="formControlsTextarea">
-                    <ControlLabel>Текст</ControlLabel>
-                    <FormControl
-                        style={{height: '270px'}}
-                        value={this.state.noteText}
-                        componentClass="textarea"
-                        onChange={this.handleChangeText}
-                        placeholder="Введите текст..."/>
-                </FormGroup>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={this.handleClose}>Отмена</Button>
-                <Button onClick={() => this.props.editNote(this.getNote())}>Сохранить</Button>
-            </Modal.Footer>
-        </Modal>
-    }
-}*/
-
-/*[
-    {
-        Id: 0,
-        CatalogId: 1,
-        Header: '',
-        IsImportant: false,
-        DateOfCreation: '2012-12-1',
-        DateOfEditing: null,
-        Text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ' +
-        'Donec laoreet efficitur quam, at fermentum augue eleifend auctor. ' +
-        'Nulla commodo mauris sit amet purus rhoncus ultrices. '
-    },
-    {
-        Id: 1,
-        CatalogId: 1,
-        Header: '',
-        IsImportant: true,
-        DateOfCreation: '2012-12-1',
-        DateOfEditing: null,
-        Text: 'Добрый день.'
-    }
-]*/
 class NotesController extends Component {
     constructor(props) {
         super(props)
@@ -191,25 +78,18 @@ class NotesController extends Component {
         let body = {
             id: 0,
             idCreator: 1,//this.props.currentUser.profile.Id
-            IsImportant: values.IsImportant,
-            DateOfCreation: moment(),
+            IsImportant: values.IsImportant ? 1 : 0,
+            DateOfCreation: moment().format('YYYY-MM-DD HH:mm:SS'),
             DateOfChange: null,
             HeaderText: values.HeaderText,
             NoteText: values.NoteText
         }
         console.log('SUBMIT BODY', body)
-        this.props.postNote(body)
+        this.props.postMethod(addNote, body)
     }
 
-  /*  componentWillReceiveProps(prevProps){
-        if(prevProps.notes.items !== this.props.notes.items){
-            console.log('DID UPDATE', this.props.notes.items)
-            this.props.fetchNotes()
-        }
-    }*/
-
     componentDidMount() {
-        this.props.fetchNotes()
+        this.props.getMethod(getNotes)
     }
 
     render() {
@@ -229,10 +109,18 @@ class NotesController extends Component {
                                 {noteFields()}
                             </Panel.Body>
                             <Panel.Footer style={{textAlign: 'right', backgroundColor: 'white'}}>
-                                <Button type="button" disabled={pristine || submitting} onClick={reset}>
+                                <Button
+                                    style={{marginRight: '5px'}}
+                                    type="button"
+                                    disabled={pristine || submitting}
+                                    onClick={reset}
+                                    bsStyle="default">
                                     Очистить
                                 </Button>
-                                <Button style={{marginRight: '5px'}} type="submit" disabled={pristine || submitting}>
+                                <Button
+                                    type="submit"
+                                    disabled={pristine || submitting}
+                                    bsStyle="success">
                                     Сохранить
                                 </Button>
                                 {/*<Button style={{marginRight: '5px'}} onClick={this.clearNote}>Очистить</Button>
@@ -269,7 +157,7 @@ class NotesController extends Component {
                     })}
                 </div>
             </Row>}
-            {/*</CSSTransition>*/}
+           {/* </CSSTransition>*/}
             <Row>
                 {!this.isEverythingImportant() &&
                 <div>
@@ -309,10 +197,11 @@ class NotesController extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        fetchNotes,
+        getMethod,
+        postMethod,
+        deleteMethod,
         getCurrentNote,
         clearCurrentNote,
-        postNote
     }, dispatch)
 }
 
