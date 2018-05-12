@@ -31,7 +31,6 @@ import {CSSTransition} from 'react-transition-group'
 class NotesController extends Component {
     constructor(props) {
         super(props)
-        console.log('WOW CONSTRUCTOR')
         this.state = {
             showModal: false,
         }
@@ -143,8 +142,7 @@ class NotesController extends Component {
                             let previewText = (note.NoteText.length > 50) ? note.NoteText.substr(0, 48) + '...' : note.NoteText
                             return <div key={key}
                                         className="note-important">
-                                <div onClick={() => this.openModal(note.id)}
-                                     ref={this.noteClick}>
+                                <div onClick={() => this.openModal(note.id)}>
                                     {previewText}
                                 </div>
                                 <Glyphicon

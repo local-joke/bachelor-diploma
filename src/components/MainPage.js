@@ -12,8 +12,7 @@ import {
 import '../styles/MainPage.css'
 import NotesController from './Notes/NotesController'
 import BooksController from './BooksController'
-import DocumentsController from './DocumentsController'
-import {ReactReader} from 'react-reader'
+import DocumentsController from './Documents/DocumentsController'
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 
 export default class MainPage extends Component {
@@ -42,14 +41,22 @@ export default class MainPage extends Component {
                 <Row>
                     <Col xs={12} sm={2} className="catalogs-column">
                         <Row>
-                            <Link to="/notes" className="catalogs-item">Заметки</Link>
-                            <Link to="/books" className="catalogs-item">Книги</Link>
+                            <div className="catalogs-item">
+                                <Link to="/notes">Заметки</Link>
+                            </div>
+                            <div className="catalogs-item">
+                                <Link to="/books">Книги</Link>
+                            </div>
+                            <div className="catalogs-item">
+                                <Link to="/documents">Документы</Link>
+                            </div>
                         </Row>
                     </Col>
                     <Col xs={12} sm={10}>
                         <Row className="items-background">
                             <Route path="/notes" component={NotesController}/>
                             <Route path="/books" component={BooksController}/>
+                            <Route path="/documents" component={DocumentsController}/>
                             {/*<Route path='notes' component={Admin}/>
                 <Route path='genre' component={Genre}/>*/}
                         </Row>

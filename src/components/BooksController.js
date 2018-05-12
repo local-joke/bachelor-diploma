@@ -18,51 +18,24 @@ import {
     ControlLabel
 } from 'react-bootstrap'
 import '../styles/notes.css'
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
+import {
+    //non-api
+    setCurrentFile,
+    clearCurrentFile
+} from "../redux/actions/files"
+import FileViewModal from './common/FileViewModal'
+import {getMethod, postMethod, deleteMethod} from '../api/index'
+import {withRouter} from 'react-router-dom'
 //import {CSSTransitionGroup} from 'react-transition-group'
 
-class BookViewModal extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            book: null,
-            show: false
-        }
-        this.handleShow = this.handleShow.bind(this);
-        this.handleClose = this.handleClose.bind(this);
-    }
-
-    handleClose() {
-        this.setState({show: false});
-    }
-
-    handleShow(book) {
-        console.log('BOOK',book)
-        this.setState({
-            show: true,
-            book: book
-        });
-    }
-
-    render(){
-        return <Modal show={this.state.show} size={this.props.size} onHide={this.handleClose}>
-            <Modal.Body style={{height: '400px'}}>
-                <div style={{position: 'relative', height: '100%'}}>
-                    {this.state.book && <ReactReader
-                        url={this.state.book.URL}
-                        title={this.state.book.Title}
-                        locationChanged={(epubcifi) => console.log(epubcifi)}
-                    />}
-                </div>
-            </Modal.Body>
-        </Modal>
-    }
-}
-
-export default class NotesController extends Component {
+class BooksController extends Component {
     constructor(props) {
         super(props)
         console.log('WOW CONSTRUCTOR')
         this.state = {
+            showModal: false,
             idCounter: 1,
             books: [
                 {
@@ -76,6 +49,8 @@ export default class NotesController extends Component {
         }
         this.addBook = this.addBook.bind(this);
         this.clearBook = this.clearBook.bind(this)
+        this.openModal = this.openModal.bind(this)
+        this.closeModal = this.closeModal.bind(this)
     }
 
     addBook() {
@@ -100,7 +75,17 @@ export default class NotesController extends Component {
     }
 
     openModal(book) {
-        this.bookViewModal.handleShow(book)
+        this.props.setCurrentFile(book)
+        this.setState({
+            showModal: true,
+        })
+    }
+
+    closeModal() {
+        this.props.clearCurrentFile()
+        this.setState({
+            showModal: false
+        })
     }
 
     render() {
@@ -156,10 +141,29 @@ export default class NotesController extends Component {
                     })}
                 {/*</CSSTransitionGroup>*/}
             </Row>
-            <BookViewModal
+            <FileViewModal
                 size="large"
-                ref={c => this.bookViewModal = c}
+                show={this.state.showModal}
+                modalCloseHandler={this.closeModal}
             />
         </Col>
     }
 }
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        getMethod,
+        postMethod,
+        deleteMethod,
+        setCurrentFile,
+        clearCurrentFile
+    }, dispatch)
+}
+
+/*function mapStateToProps(state) {
+    return {
+        documents: state.documents.items
+    }
+}*/
+
+export default withRouter(connect(null, mapDispatchToProps)(BooksController))

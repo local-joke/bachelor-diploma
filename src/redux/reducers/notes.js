@@ -7,9 +7,7 @@ import {
     DELETE_NOTE
 } from '../constants/index'
 
-function removeItem(array, action) {
-    return array.filter( (item) => item.id !== Number(action.response.id));
-}
+import {removeItem, addItem, insertItem} from "../helpers"
 
 const notes = (state = {
     currentNote: null,
@@ -36,10 +34,7 @@ const notes = (state = {
         case ADD_NOTE:
             console.log('REDUCER ADD NOTE', action.body)
             return Object.assign({}, state, {
-                items: [
-                    ...state.items,
-                    action.response[0]
-                ]
+                items: addItem(state.items, action)
             })
 
         case DELETE_NOTE:
@@ -50,12 +45,7 @@ const notes = (state = {
 
         case EDIT_NOTE:
             return Object.assign({}, state, {
-                items: state.items.map((item) => {
-                    if (item.id === action.response[0].id) {
-                        return action.response[0]
-                    }
-                    else return item
-                })
+                items: insertItem(state.items, action)
             })
 
         case CLEAR_CURRENT_NOTE:
