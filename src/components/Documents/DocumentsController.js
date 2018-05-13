@@ -21,9 +21,13 @@ import {
     deleteDocument,
 } from '../../redux/actions/documents'
 import {
+    //api
+    uploadFile,
     //non-api
     setCurrentFile,
-    clearCurrentFile
+    clearCurrentFile,
+    setDroppedFile,
+    clearDroppedFile
 } from "../../redux/actions/files"
 import {getMethod, postMethod, deleteMethod} from '../../api/index'
 import {withRouter} from 'react-router-dom'
@@ -31,6 +35,9 @@ import Dropzone from 'react-dropzone'
 import FileViewer from 'react-file-viewer'
 import {getCurrentDate} from '../../redux/helpers'
 import FileViewModal from '../common/FileViewModal'
+import Gallery from 'react-photo-gallery';
+import Lightbox from 'react-images';
+import ImagesViewer from './ImagesViewer'
 
 const popover = (doc, deleteDocument) => (
     <Popover id="popover-positioned-scrolling-right" style={{width: '500px'}}>
@@ -110,14 +117,13 @@ class DocumentsController extends Component {
         super(props)
         this.state = {
             showModal: false,
-            chosenFiles: null,
-            chosenDocument: null
         }
         this.addDocumentHandler = this.addDocumentHandler.bind(this);
         this.deleteDocument = this.deleteDocument.bind(this)
         this.openModal = this.openModal.bind(this)
         this.closeModal = this.closeModal.bind(this)
         this.onDrop = this.onDrop.bind(this)
+        this.clearDrop = this.clearDrop.bind(this)
     }
 
     openModal(doc) {
@@ -135,33 +141,36 @@ class DocumentsController extends Component {
     }
 
     onDrop(acceptedFiles) {
-        this.setState({
-            chosenFiles: acceptedFiles
-        })
+       this.props.setDroppedFile(acceptedFiles[0])
+    }
+
+    clearDrop(){
+        this.props.clearDroppedFile()
     }
 
     addDocumentHandler() {
-        let droppedFile = this.state.chosenFiles[0]
+        let droppedFile = this.props.droppedFile
+        console.log('doc submit', droppedFile)
         let formData = new FormData()
-        formData.append('newDoc', droppedFile, droppedFile.name)
+        console.log('DROPPED FILE', this.props.droppedFile)
+        formData.append('newFile', droppedFile, droppedFile.name)
         let body = {
-            user_name: 'local-joke',
-            table_name: 'document',
             idCreator: 1,
             idFolder: null,
             DateOfCreation: getCurrentDate(),
-            Type: droppedFile.name.substr(droppedFile.name.lastIndexOf('.') + 1),
+            Type: droppedFile.name.substr(droppedFile.name.lastIndexOf('.') + 1).toLowerCase(),
             Name: droppedFile.name,
-            URL: ''
+            URL: 'local-joke' + '/' + droppedFile.name
         }
-        formData.append('otherInfo', JSON.stringify(body))
-        console.log('FORM DATA', formData)
+        formData.append('fileInfo', JSON.stringify(body))
+        console.log('FORM DATA', body)
         this.props.postMethod(addDocument, formData)
+        this.props.clearDroppedFile()
     }
 
     deleteDocument(id){
         console.log('DELETE',id)
-        //this.props.deleteMethod(deleteDocument, id)
+        this.props.deleteMethod(deleteDocument, id)
     }
 
     getDocumentsTypes() {
@@ -189,6 +198,10 @@ class DocumentsController extends Component {
         this.props.getMethod(getDocuments)
     }
 
+    componentWillUnmount(){
+        this.props.clearDroppedFile()
+    }
+
     render() {
 
         let docTypes = this.getDocumentsTypes()
@@ -198,7 +211,7 @@ class DocumentsController extends Component {
                 <Panel id="collapsible-panel-example-2" defaultExpanded>
                     <Panel.Heading style={{backgroundColor: 'white'}}>
                         <Panel.Title toggle>
-                            Загрузить документ
+                            {this.props.imagesMode ? 'Загрузить изображение' : 'Загрузить документ'}
                         </Panel.Title>
                     </Panel.Heading>
                     <Panel.Collapse>
@@ -211,13 +224,14 @@ class DocumentsController extends Component {
                             <Button
                                 style={{marginRight: '5px'}}
                                 type="button"
-                                bsStyle="default">
+                                bsStyle="default"
+                                onClick={this.clearDrop}
+                            >
                                 Очистить
                             </Button>
                             <Button
                                 type="submit"
                                 bsStyle="success"
-                                disabled={!this.state.chosenFiles}
                                 onClick={this.addDocumentHandler}
                             >
                                 Загрузить
@@ -229,7 +243,8 @@ class DocumentsController extends Component {
                 </Panel>
             </Row>
             <Row>
-                {this.props.documents.map((doc, key) => {
+                {this.props.imagesMode ? <ImagesViewer/>
+                    : this.props.documents.map((doc, key) => {
                     return <DocumentItem
                         key={key}
                         openModal={this.openModal}
@@ -253,13 +268,17 @@ function mapDispatchToProps(dispatch) {
         postMethod,
         deleteMethod,
         setCurrentFile,
-        clearCurrentFile
+        clearCurrentFile,
+        setDroppedFile,
+        clearDroppedFile
     }, dispatch)
 }
 
 function mapStateToProps(state) {
     return {
-        documents: state.documents.items
+        droppedFile : state.currentFile.droppedFile,
+        documents: state.documents.items,
+        images: state.documents.images
     }
 }
 

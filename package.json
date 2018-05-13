@@ -38,6 +38,8 @@
     "react-dev-utils": "^5.0.0",
     "react-dom": "^16.3.0",
     "react-dropzone": "^4.2.9",
+    "react-images": "^0.5.17",
+    "react-photo-gallery": "^6.0.25",
     "react-reader": "^0.16.7",
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",

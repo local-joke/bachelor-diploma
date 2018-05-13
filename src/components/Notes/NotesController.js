@@ -17,7 +17,7 @@ import {
     addNote,
     deleteNote,
     //non-api
-    getCurrentNote,
+    setCurrentNote,
     clearCurrentNote,
 } from '../../redux/actions/notes'
 import {getMethod, postMethod, deleteMethod} from '../../api/index'
@@ -25,6 +25,7 @@ import {withRouter} from 'react-router-dom'
 import { reduxForm} from 'redux-form'
 import {noteFields} from "./noteFields"
 import NoteModal from './NoteModal'
+import {getCurrentDate} from '../../redux/helpers'
 
 import {CSSTransition} from 'react-transition-group'
 
@@ -40,7 +41,7 @@ class NotesController extends Component {
     }
 
     openModal(noteId) {
-        this.props.getCurrentNote(noteId)
+        this.props.setCurrentNote(noteId)
         this.setState({
             showModal: true
         })
@@ -78,7 +79,7 @@ class NotesController extends Component {
             id: 0,
             idCreator: 1,//this.props.currentUser.profile.Id
             IsImportant: values.IsImportant ? 1 : 0,
-            DateOfCreation: moment().format('YYYY-MM-DD HH:mm:SS'),
+            DateOfCreation:getCurrentDate(),
             DateOfChange: null,
             HeaderText: values.HeaderText,
             NoteText: values.NoteText
@@ -198,7 +199,7 @@ function mapDispatchToProps(dispatch) {
         getMethod,
         postMethod,
         deleteMethod,
-        getCurrentNote,
+        setCurrentNote,
         clearCurrentNote,
     }, dispatch)
 }

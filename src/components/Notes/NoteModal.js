@@ -15,6 +15,7 @@ import {
     editNote,
 } from '../../redux/actions/notes'
 import { deleteMethod, putMethod } from '../../api/index'
+import {getCurrentDate} from '../../redux/helpers'
 
 class NoteModal extends Component {
     constructor(props) {
@@ -37,7 +38,7 @@ class NoteModal extends Component {
             idCreator: 1, //idCreator: this.props.currentUser.profile.Id,
             IsImportant: values.IsImportant ? 1 : 0,
             DateOfCreation: values.DateOfCreation,
-            DateOfChange: moment().format('YYYY-MM-DD HH:MM:SS'),
+            DateOfChange: getCurrentDate(),
             HeaderText: values.HeaderText,
             NoteText: values.NoteText
         }

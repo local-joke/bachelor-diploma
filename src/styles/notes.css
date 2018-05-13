@@ -48,11 +48,34 @@
     top: 5px;
     font-size: 18px;
     cursor: pointer;
-    color: grey
+    color: grey;
+    z-index: 11;
 }
 
 .paperclip:hover{
     color: darkgoldenrod;
+}
+
+.imageContainer{
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+}
+
+.imageInfo{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    color: white;
+    border-color: black;
+    z-index: 11;
+}
+
+.imageInfo:hover{
+    color: black;
+    border-color: white;
 }
 
 .new-note{

@@ -1,11 +1,9 @@
 import {
     FETCH_DOCUMENTS,
-    GET_CURRENT_DOCUMENT,
-    CLEAR_CURRENT_DOCUMENT,
     ADD_DOCUMENT,
-    EDIT_DOCUMENT,
     DELETE_DOCUMENT
 } from '../constants/index'
+import {uploadFile, deleteFile} from './files'
 
 export function getDocuments(documents) {
     return {
@@ -16,26 +14,9 @@ export function getDocuments(documents) {
 }
 
 export function addDocument(body) {
-    return {
-        type: ADD_DOCUMENT,
-        endpoint: 'PostDocument',
-        response: body
-    }
+    return uploadFile(ADD_DOCUMENT, body, 'document')
 }
 
 export function deleteDocument(id) {
-    return {
-        type: DELETE_DOCUMENT,
-        endpoint: 'DeleteDocument?id=',
-        response: id
-    }
-}
-
-export function editDocument(body) {
-    console.log('ACTION', body)
-    return {
-        type: EDIT_DOCUMENT,
-        endpoint: 'PutDocument?id=',
-        response: body
-    }
+    return deleteFile(DELETE_DOCUMENT, 'document', id)
 }

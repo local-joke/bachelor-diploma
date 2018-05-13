@@ -1,9 +1,6 @@
 import {
     FETCH_DOCUMENTS,
-    GET_CURRENT_DOCUMENT,
-    CLEAR_CURRENT_DOCUMENT,
     ADD_DOCUMENT,
-    EDIT_DOCUMENT,
     DELETE_DOCUMENT
 } from '../constants/index'
 
@@ -27,11 +24,6 @@ const documents = (state = {
         case DELETE_DOCUMENT:
             return Object.assign({}, state, {
                 items: removeItem(state.items, action)
-            })
-
-        case EDIT_DOCUMENT:
-            return Object.assign({}, state, {
-                items: insertItem(state.items, action)
             })
 
         default:

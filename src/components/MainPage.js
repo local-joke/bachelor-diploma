@@ -11,8 +11,9 @@ import {
 } from 'react-bootstrap'
 import '../styles/MainPage.css'
 import NotesController from './Notes/NotesController'
-import BooksController from './BooksController'
+import BooksController from './Books/BooksController'
 import DocumentsController from './Documents/DocumentsController'
+import ImagesLink from './Documents/ImagesLink'
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 
 export default class MainPage extends Component {
@@ -50,6 +51,9 @@ export default class MainPage extends Component {
                             <div className="catalogs-item">
                                 <Link to="/documents">Документы</Link>
                             </div>
+                            <div className="catalogs-item">
+                                <Link to="/images">Изображения</Link>
+                            </div>
                         </Row>
                     </Col>
                     <Col xs={12} sm={10}>
@@ -57,6 +61,7 @@ export default class MainPage extends Component {
                             <Route path="/notes" component={NotesController}/>
                             <Route path="/books" component={BooksController}/>
                             <Route path="/documents" component={DocumentsController}/>
+                            <Route path="/images" component={ImagesLink}/>
                             {/*<Route path='notes' component={Admin}/>
                 <Route path='genre' component={Genre}/>*/}
                         </Row>

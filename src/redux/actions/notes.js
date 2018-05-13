@@ -15,7 +15,7 @@ export function getNotes(notes) {
     }
 }
 
-export function getCurrentNote(id) {
+export function setCurrentNote(id) {
     return {
         type: GET_CURRENT_NOTE,
         id
