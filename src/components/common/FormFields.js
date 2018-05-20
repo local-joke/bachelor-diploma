@@ -12,12 +12,13 @@ export const formInput = (props) => {
         input,
         label,
         type,
+        name,
         placeholder,
         disabled,
     } = props;
 
     return (
-        <FormGroup controlId='formInput' bsSize='large' validationState={invalid?'error':(input.value.length?'success':null)}>
+        <FormGroup bsSize='large' validationState={invalid?'error':(input.value.length?'success':null)}>
             <ControlLabel>{label}</ControlLabel>
             <FormControl
                 {...input}
@@ -42,7 +43,7 @@ export const formTextArea = (props) => {
     } = props;
 
     return (
-        <FormGroup controlId='formInput' bsSize='large' validationState={invalid?'error':(input.value.length?'success':null)}>
+        <FormGroup bsSize='large' validationState={invalid?'error':(input.value.length?'success':null)}>
             <ControlLabel>{label}</ControlLabel>
             <FormControl
                 {...input}

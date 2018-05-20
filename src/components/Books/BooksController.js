@@ -5,6 +5,7 @@ import {
     Row,
     Button,
     FormGroup,
+    Glyphicon,
     FormControl,
     Panel,
     ControlLabel
@@ -43,9 +44,16 @@ class Book extends Component {
         let previewText = (book.Title.length > 40) ? book.Title.substr(0, 38) + '...' : book.Title
         return <div className="book-container">
             <div className="book-left-part">
+                    <Glyphicon
+                        glyph="option-vertical"
+                        bsSize="large"
+                        className="paperclip"
+                        onClick={() => this.props.openEditModal(book.id)}
+                    />
             </div>
-            <div className="book" onClick={() => this.props.openModal(book)}>
-                {previewText}
+            <div className="book" onClick={() => this.props.openViewModal(book)}>
+                <h5>{book.Author && book.Author}</h5>
+                <div>{previewText}</div>
             </div>
         </div>
     }
@@ -86,6 +94,7 @@ class BooksController extends Component {
         console.log('FORM DATA', body)
         this.props.postMethod(addBook, formData)
         this.props.clearDroppedFile()
+        this.props.clearFields()
     }
 
     onDrop(acceptedFiles) {
@@ -127,7 +136,7 @@ class BooksController extends Component {
     }
 
     componentDidMount(){
-        this.props.getMethod(getBooks)
+        this.props.getMethod(getBooks, this.props.auth.currentUser.id)
     }
 
     componentWillUnmount(){
@@ -182,14 +191,15 @@ class BooksController extends Component {
                         return <Book
                             key={key}
                             book={book}
-                            openModal={this.openViewModal}
+                            openViewModal={this.openViewModal}
+                            openEditModal={this.openEditModal}
                         />
                     })}
                 {/*</CSSTransitionGroup>*/}
             </Row>
             <BookModal
                 size="large"
-                show={this.state.showEditModal}
+                showModal={this.state.showEditModal}
                 modalCloseHandler={this.closeEditModal}
             />
             <FileViewModal
@@ -217,6 +227,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
+        auth: state.auth,
         droppedFile : state.currentFile.droppedFile,
         books: state.books.items
     }

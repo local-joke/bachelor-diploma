@@ -1,16 +1,21 @@
 import {
     FETCH_NOTES,
+    FETCH_NOTES_SUCCESS,
     GET_CURRENT_NOTE,
     CLEAR_CURRENT_NOTE,
     ADD_NOTE,
+    ADD_NOTE_SUCCESS,
     EDIT_NOTE,
-    DELETE_NOTE
+    EDIT_NOTE_SUCCESS,
+    DELETE_NOTE,
+    DELETE_NOTE_SUCCESS,
+    NOTES_FAILURE,
 } from '../constants/index'
 
 export function getNotes(notes) {
     return {
-        type: FETCH_NOTES,
-        endpoint: 'GetNotesByCreatorId?creatorId=1',
+        types: [FETCH_NOTES, FETCH_NOTES_SUCCESS, NOTES_FAILURE],
+        endpoint: 'GetNotesByUserId?userId=',
         response: notes
     }
 }
@@ -30,7 +35,7 @@ export function clearCurrentNote() {
 
 export function addNote(body) {
     return {
-        type: ADD_NOTE,
+        types: [ADD_NOTE, ADD_NOTE_SUCCESS, NOTES_FAILURE],
         endpoint: 'PostNote',
         response: body
     }
@@ -38,7 +43,7 @@ export function addNote(body) {
 
 export function deleteNote(id) {
     return {
-        type: DELETE_NOTE,
+        types: [DELETE_NOTE, DELETE_NOTE_SUCCESS, NOTES_FAILURE],
         endpoint: 'DeleteNote?id=',
         response: id
     }
@@ -47,7 +52,7 @@ export function deleteNote(id) {
 export function editNote(body) {
     console.log('ACTION', body)
     return {
-        type: EDIT_NOTE,
+        types: [EDIT_NOTE, EDIT_NOTE_SUCCESS, NOTES_FAILURE],
         endpoint: 'PutNote?id=',
         response: body
     }

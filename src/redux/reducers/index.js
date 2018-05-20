@@ -3,6 +3,7 @@ import notes from './notes'
 import documents from './documents'
 import currentFile from './files'
 import books from './books'
+import auth from './auth'
 import { reducer as formReducer } from 'redux-form'
 
 export default combineReducers({
@@ -10,5 +11,6 @@ export default combineReducers({
     documents,
     currentFile,
     books,
+    auth,
     form: formReducer
 })

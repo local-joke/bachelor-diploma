@@ -1,22 +1,26 @@
 import {
     FETCH_DOCUMENTS,
+    FETCH_DOCUMENTS_SUCCESS,
     ADD_DOCUMENT,
-    DELETE_DOCUMENT
+    ADD_DOCUMENT_SUCCESS,
+    DELETE_DOCUMENT,
+    DELETE_DOCUMENT_SUCCESS,
+    DOCUMENT_FAILURE,
 } from '../constants/index'
 import {uploadFile, deleteFile} from './files'
 
 export function getDocuments(documents) {
     return {
-        type: FETCH_DOCUMENTS,
-        endpoint: 'GetDocumentsByCreatorId?creatorId=1',
+        types: [FETCH_DOCUMENTS, FETCH_DOCUMENTS_SUCCESS, DOCUMENT_FAILURE],
+        endpoint: 'GetDocumentsByUserId?userId=',
         response: documents
     }
 }
 
 export function addDocument(body) {
-    return uploadFile(ADD_DOCUMENT, body, 'document')
+    return uploadFile([ADD_DOCUMENT, ADD_DOCUMENT_SUCCESS, DOCUMENT_FAILURE], body, 'document')
 }
 
 export function deleteDocument(id) {
-    return deleteFile(DELETE_DOCUMENT, 'document', id)
+    return deleteFile([DELETE_DOCUMENT, DELETE_DOCUMENT_SUCCESS, DOCUMENT_FAILURE], 'document', id)
 }

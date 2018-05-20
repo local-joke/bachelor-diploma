@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {
+    Fade,
     Col,
     Row,
     Button,
@@ -22,12 +23,29 @@ import {
 } from '../../redux/actions/notes'
 import {getMethod, postMethod, deleteMethod} from '../../api/index'
 import {withRouter} from 'react-router-dom'
-import { reduxForm} from 'redux-form'
+import {reduxForm} from 'redux-form'
 import {noteFields} from "./noteFields"
 import NoteModal from './NoteModal'
 import {getCurrentDate} from '../../redux/helpers'
 
 import {CSSTransition} from 'react-transition-group'
+
+const Note = (props) => {
+    const {previewText, openModal, setIsImportant, note, className} = props
+
+    return <Fade in>
+        <div className={className}>
+            <div onClick={() => openModal(note.id)}>
+                {previewText}
+            </div>
+            <Glyphicon
+                glyph="paperclip"
+                bsSize="large"
+                className="paperclip"
+                onClick={() => setIsImportant(note.id)}/>
+        </div>
+    </Fade>
+}
 
 class NotesController extends Component {
     constructor(props) {
@@ -38,6 +56,8 @@ class NotesController extends Component {
         this.addNoteHandleSubmit = this.addNoteHandleSubmit.bind(this);
         this.openModal = this.openModal.bind(this)
         this.closeModal = this.closeModal.bind(this)
+        this.setIsImportant = this.setIsImportant.bind(this)
+        this.renderNotes = this.renderNotes.bind(this)
     }
 
     openModal(noteId) {
@@ -45,6 +65,10 @@ class NotesController extends Component {
         this.setState({
             showModal: true
         })
+    }
+
+    setIsImportant() {
+
     }
 
     closeModal() {
@@ -79,17 +103,37 @@ class NotesController extends Component {
             id: 0,
             idCreator: 1,//this.props.currentUser.profile.Id
             IsImportant: values.IsImportant ? 1 : 0,
-            DateOfCreation:getCurrentDate(),
+            DateOfCreation: getCurrentDate(),
             DateOfChange: null,
             HeaderText: values.HeaderText,
             NoteText: values.NoteText
         }
         console.log('SUBMIT BODY', body)
         this.props.postMethod(addNote, body)
+        this.props.clearFields()
     }
 
     componentDidMount() {
-        this.props.getMethod(getNotes)
+        this.props.getMethod(getNotes, this.props.auth.currentUser.id)
+    }
+
+    renderNotes(isImportant) {
+        this.props.notes && this.props.notes.map((note, key) => {
+            if (note.IsImportant === isImportant) {
+                let previewText = (note.NoteText.length > 50) ? note.NoteText.substr(0, 48) + '...' : note.NoteText
+                let className = note.IsImportant ? 'note-important' : 'note'
+                return <Fade appear>
+                    <Note
+                        key={key}
+                        previewText={previewText}
+                        openModal={this.openModal}
+                        note={note}
+                        className={className}
+                        setIsImportant={this.setIsImportant}
+                    />
+                </Fade>
+            }
+        })
     }
 
     render() {
@@ -123,8 +167,6 @@ class NotesController extends Component {
                                     bsStyle="success">
                                     Сохранить
                                 </Button>
-                                {/*<Button style={{marginRight: '5px'}} onClick={this.clearNote}>Очистить</Button>
-                                <Button onClick={this.addNote}>Сохранить</Button>*/}
                             </Panel.Footer>
                         </Panel.Collapse>
                     </Panel>
@@ -141,22 +183,20 @@ class NotesController extends Component {
                     {this.props.notes && this.props.notes.map((note, key) => {
                         if (note.IsImportant) {
                             let previewText = (note.NoteText.length > 50) ? note.NoteText.substr(0, 48) + '...' : note.NoteText
-                            return <div key={key}
-                                        className="note-important">
-                                <div onClick={() => this.openModal(note.id)}>
-                                    {previewText}
-                                </div>
-                                <Glyphicon
-                                    glyph="paperclip"
-                                    bsSize="large"
-                                    className="paperclip"
-                                    onClick={() => this.setIsImportant(note.id)}/>
-                            </div>
+                            let className = note.IsImportant ? 'note-important' : 'note'
+                            return <Note
+                                key={key}
+                                previewText={previewText}
+                                openModal={this.openModal}
+                                note={note}
+                                className={className}
+                                setIsImportant={this.setIsImportant}
+                            />
                         }
                     })}
                 </div>
             </Row>}
-           {/* </CSSTransition>*/}
+            {/* </CSSTransition>*/}
             <Row>
                 {!this.isEverythingImportant() &&
                 <div>
@@ -169,15 +209,15 @@ class NotesController extends Component {
                         {this.props.notes && this.props.notes.map((note, key) => {
                             if (!note.IsImportant) {
                                 let previewText = (note.NoteText.length > 50) ? note.NoteText.substr(0, 48) + '...' : note.NoteText
-                                return <div key={key}
-                                            className="note">
-                                    <div onClick={() => this.openModal(note.id)}>
-                                        {previewText}
-                                    </div>
-                                    <Glyphicon glyph="paperclip" bsSize="large"
-                                               onClick={() => this.setIsImportant(note.id)}
-                                               className="paperclip"/>
-                                </div>
+                                let className = note.IsImportant ? 'note-important' : 'note'
+                                return <Note
+                                    key={key}
+                                    previewText={previewText}
+                                    openModal={this.openModal}
+                                    note={note}
+                                    className={className}
+                                    setIsImportant={this.setIsImportant}
+                                />
                             }
                         })}
                     </div>
@@ -206,6 +246,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
+        auth: state.auth,
         notes: state.notes.items
     }
 }

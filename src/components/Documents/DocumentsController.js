@@ -21,8 +21,6 @@ import {
     deleteDocument,
 } from '../../redux/actions/documents'
 import {
-    //api
-    uploadFile,
     //non-api
     setCurrentFile,
     clearCurrentFile,
@@ -152,7 +150,6 @@ class DocumentsController extends Component {
         let droppedFile = this.props.droppedFile
         console.log('doc submit', droppedFile)
         let formData = new FormData()
-        console.log('DROPPED FILE', this.props.droppedFile)
         formData.append('newFile', droppedFile, droppedFile.name)
         let body = {
             idCreator: 1,
@@ -195,7 +192,7 @@ class DocumentsController extends Component {
     }
 
     componentDidMount() {
-        this.props.getMethod(getDocuments)
+        this.props.auth.currentUser.id && this.props.getMethod(getDocuments, this.props.auth.currentUser.id)
     }
 
     componentWillUnmount(){
@@ -276,6 +273,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
+        auth: state.auth,
         droppedFile : state.currentFile.droppedFile,
         documents: state.documents.items,
         images: state.documents.images

@@ -1,33 +1,38 @@
 import {
     FETCH_BOOKS,
+    FETCH_BOOKS_SUCCESS,
     GET_CURRENT_BOOK,
     CLEAR_CURRENT_BOOK,
     ADD_BOOK,
+    ADD_BOOK_SUCCESS,
     EDIT_BOOK,
+    EDIT_BOOK_SUCCESS,
     DELETE_BOOK,
+    DELETE_BOOK_SUCCESS,
+    BOOK_FAILURE
 } from '../constants/index'
 import {uploadFile, deleteFile} from './files'
 
 export function getBooks(books) {
     return {
-        type: FETCH_BOOKS,
-        endpoint: 'GetBooksByCreatorId?creatorId=1',
+        types: [FETCH_BOOKS, FETCH_BOOKS_SUCCESS, BOOK_FAILURE],
+        endpoint: 'GetBooksByUserId?userId=',
         response: books
     }
 }
 
 export function addBook(body) {
-    return uploadFile(ADD_BOOK, body, 'book')
+    return uploadFile([ADD_BOOK, ADD_BOOK_SUCCESS, BOOK_FAILURE], body, 'book')
 }
 
 export function deleteBook(id) {
-    return deleteFile(DELETE_BOOK, 'book', id)
+    return deleteFile([DELETE_BOOK,DELETE_BOOK_SUCCESS, BOOK_FAILURE], 'book', id)
 }
 
 export function editBook(body) {
     console.log('ACTION', body)
     return {
-        type: EDIT_BOOK,
+        types: [EDIT_BOOK, EDIT_BOOK_SUCCESS, BOOK_FAILURE],
         endpoint: 'PutBook?id=',
         response: body
     }

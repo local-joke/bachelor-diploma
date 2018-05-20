@@ -20,17 +20,17 @@ export function clearCurrentFile() {
     }
 }
 
-export function uploadFile(actionType, body, controllerName) {
+export function uploadFile(actionTypes, body, controllerName) {
     return {
-        type: actionType,
+        types: actionTypes,
         endpoint: 'PostFile?controllerName=' + controllerName,
         response: body
     }
 }
 
-export function deleteFile(actionType, controllerName, fileId){
+export function deleteFile(actionTypes, controllerName, fileId){
     return {
-        type: actionType,
+        types: actionTypes,
         endpoint: 'DeleteFile?controllerName=' + controllerName + '&id=',
         response: fileId
     }
