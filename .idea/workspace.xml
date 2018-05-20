@@ -2,31 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3d945ddf-bc2c-4393-876d-3a431fcfaa53" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/Authorize/Login.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/Authorize/Registration.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/routes.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/redux/actions/auth.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/redux/reducers/auth.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/styles/loginForm.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/api/index.js" afterPath="$PROJECT_DIR$/src/api/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/App.js" afterPath="$PROJECT_DIR$/src/components/App.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Books/BooksController.js" afterPath="$PROJECT_DIR$/src/components/Books/BooksController.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Documents/DocumentsController.js" afterPath="$PROJECT_DIR$/src/components/Documents/DocumentsController.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Documents/ImagesLink.js" afterPath="$PROJECT_DIR$/src/components/Documents/ImagesLink.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/MainPage.js" afterPath="$PROJECT_DIR$/src/components/MainPage.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Notes/NotesController.js" afterPath="$PROJECT_DIR$/src/components/Notes/NotesController.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/common/FormFields.js" afterPath="$PROJECT_DIR$/src/components/common/FormFields.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/redux/actions/books.js" afterPath="$PROJECT_DIR$/src/redux/actions/books.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/redux/actions/documents.js" afterPath="$PROJECT_DIR$/src/redux/actions/documents.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/redux/actions/files.js" afterPath="$PROJECT_DIR$/src/redux/actions/files.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/redux/actions/notes.js" afterPath="$PROJECT_DIR$/src/redux/actions/notes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/redux/constants/index.js" afterPath="$PROJECT_DIR$/src/redux/constants/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/redux/reducers/books.js" afterPath="$PROJECT_DIR$/src/redux/reducers/books.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/redux/reducers/documents.js" afterPath="$PROJECT_DIR$/src/redux/reducers/documents.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/redux/reducers/index.js" afterPath="$PROJECT_DIR$/src/redux/reducers/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/redux/reducers/notes.js" afterPath="$PROJECT_DIR$/src/redux/reducers/notes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/styles/notes.css" afterPath="$PROJECT_DIR$/src/styles/notes.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Authorize/Registration.js" afterPath="$PROJECT_DIR$/src/components/Authorize/Registration.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -43,7 +20,7 @@
       <file leaf-file-name="DocumentsController.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/Documents/DocumentsController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-527">
+            <state relative-caret-position="-1134">
               <caret line="167" column="23" lean-forward="true" selection-start-line="167" selection-start-column="23" selection-end-line="167" selection-end-column="23" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
@@ -132,8 +109,8 @@
       <file leaf-file-name="Registration.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/Authorize/Registration.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="55" column="9" lean-forward="true" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="9" />
+            <state relative-caret-position="-80">
+              <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -144,8 +121,8 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/api/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-68">
-              <caret line="8" column="57" lean-forward="false" selection-start-line="8" selection-start-column="57" selection-end-line="8" selection-end-column="57" />
+            <state relative-caret-position="362">
+              <caret line="40" column="17" lean-forward="true" selection-start-line="40" selection-start-column="17" selection-end-line="40" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -252,7 +229,6 @@
         <option value="$PROJECT_DIR$/src/redux/actions/notes.js" />
         <option value="$PROJECT_DIR$/src/redux/actions/books.js" />
         <option value="$PROJECT_DIR$/src/redux/actions/documents.js" />
-        <option value="$PROJECT_DIR$/src/api/index.js" />
         <option value="$PROJECT_DIR$/src/components/Notes/NotesController.js" />
         <option value="$PROJECT_DIR$/src/components/Books/BooksController.js" />
         <option value="$PROJECT_DIR$/src/components/Documents/ImagesLink.js" />
@@ -261,6 +237,7 @@
         <option value="$PROJECT_DIR$/src/redux/reducers/auth.js" />
         <option value="$PROJECT_DIR$/src/components/Documents/DocumentsController.js" />
         <option value="$PROJECT_DIR$/src/components/MainPage.js" />
+        <option value="$PROJECT_DIR$/src/api/index.js" />
         <option value="$PROJECT_DIR$/src/components/Authorize/Registration.js" />
       </list>
     </option>
@@ -463,12 +440,12 @@
       <workItem from="1525875575603" duration="11312000" />
       <workItem from="1526111074735" duration="50270000" />
       <workItem from="1526321103065" duration="3109000" />
-      <workItem from="1526716913233" duration="37954000" />
+      <workItem from="1526716913233" duration="42729000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="215157000" />
+    <option name="totallyTimeSpent" value="219932000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -785,12 +762,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Authorize/Login.js">
+    <entry file="file://$PROJECT_DIR$/src/components/App.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="38" column="27" lean-forward="false" selection-start-line="38" selection-start-column="12" selection-end-line="38" selection-end-column="27" />
+        <state relative-caret-position="306">
+          <caret line="42" column="41" lean-forward="true" selection-start-line="42" selection-start-column="41" selection-end-line="42" selection-end-column="41" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Documents/DocumentsController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1134">
+          <caret line="167" column="23" lean-forward="true" selection-start-line="167" selection-start-column="23" selection-end-line="167" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+            <element signature="e#1054#1652#0" expanded="false" />
+            <element signature="n#!!block;n#clearDrop#0;n#DocumentsController#0" expanded="false" />
+            <element signature="n#!!block;n#getDocumentsTypes#0;n#DocumentsController#0" expanded="false" />
+            <element signature="e#5020#5595#0" expanded="false" />
+            <element signature="n#!!block;n#componentWillUnmount#0;n#DocumentsController#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -815,24 +807,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-68">
-          <caret line="8" column="57" lean-forward="false" selection-start-line="8" selection-start-column="57" selection-end-line="8" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/App.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="42" column="41" lean-forward="true" selection-start-line="42" selection-start-column="41" selection-end-line="42" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/routes.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -843,17 +817,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Documents/DocumentsController.js">
+    <entry file="file://$PROJECT_DIR$/src/components/Authorize/Login.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-527">
-          <caret line="167" column="23" lean-forward="true" selection-start-line="167" selection-start-column="23" selection-end-line="167" selection-end-column="23" />
+        <state relative-caret-position="385">
+          <caret line="38" column="27" lean-forward="false" selection-start-line="38" selection-start-column="12" selection-end-line="38" selection-end-column="27" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
-            <element signature="e#1054#1652#0" expanded="false" />
-            <element signature="n#!!block;n#clearDrop#0;n#DocumentsController#0" expanded="false" />
-            <element signature="n#!!block;n#getDocumentsTypes#0;n#DocumentsController#0" expanded="false" />
-            <element signature="e#5020#5595#0" expanded="false" />
-            <element signature="n#!!block;n#componentWillUnmount#0;n#DocumentsController#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -868,10 +837,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="362">
+          <caret line="40" column="17" lean-forward="true" selection-start-line="40" selection-start-column="17" selection-end-line="40" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Authorize/Registration.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="55" column="9" lean-forward="true" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="9" />
+        <state relative-caret-position="-80">
+          <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>

@@ -21,6 +21,9 @@ import {
 
 const required = value => (value ? undefined : "Поле є обов'язковим")
 
+const loginCheck = value =>
+    value && !value.match(/^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/i) ? 'Логін містить некоректні символи' : undefined
+
 const emailCheck = value =>
     value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
         ? 'Некоректна адреса'
@@ -83,7 +86,7 @@ class Registration extends Component {
                                 placeholder="Логін"
                                 type="text"
                                 label="Логін"
-                                validate={[required, maxLength25]}
+                                validate={[required, maxLength25, loginCheck]}
                             />
                             <Field
                                 name="Password"
