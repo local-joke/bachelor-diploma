@@ -23,6 +23,11 @@ const notes = (state = {
 }, action) => {
     switch (action.type) {
 
+        case FETCH_NOTES:
+            return Object.assign({}, state, {
+                isFetching: true,
+            });
+
         case FETCH_NOTES_SUCCESS:
             return Object.assign({}, state, {
                 isFetching: false,
@@ -47,7 +52,6 @@ const notes = (state = {
             })
 
         case ADD_NOTE_SUCCESS:
-            console.log('REDUCER ADD NOTE', action.body)
             return Object.assign({}, state, {
                 isAdding: false,
                 items: addItem(state.items, action)

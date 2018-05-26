@@ -12,13 +12,14 @@ export const formInput = (props) => {
         input,
         label,
         type,
-        name,
+        bsSize,
+        className,
         placeholder,
         disabled,
     } = props;
 
     return (
-        <FormGroup bsSize='large' validationState={invalid?'error':(input.value.length?'success':null)}>
+        <FormGroup className={className} bsSize={bsSize ? bsSize : 'large'} validationState={invalid?'error':(input.value.length?'success':null)}>
             <ControlLabel>{label}</ControlLabel>
             <FormControl
                 {...input}

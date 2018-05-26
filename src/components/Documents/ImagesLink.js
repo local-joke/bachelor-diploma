@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import DocumentsController from './DocumentsController'
 
-export default class ImagesLink extends Component {
-    render(){
+const ImagesLink = (props) => {
+
         return <DocumentsController
             imagesMode={true}
         />
-    }
+
 }
+
+export default ImagesLink

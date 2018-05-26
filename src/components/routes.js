@@ -3,6 +3,7 @@ import MainPage from './MainPage'
 import NotesController from './Notes/NotesController'
 import BooksController from './Books/BooksController'
 import DocumentsController from './Documents/DocumentsController'
+import ImagesLink from './Documents/ImagesLink'
 import {Route, Redirect} from 'react-router'
 
 export const RouteWithSubRoutes = props => {
@@ -39,6 +40,10 @@ export const routes = [
             {
                 path: '/documents',
                 component: DocumentsController
+            },
+            {
+                path: '/images',
+                component: ImagesLink
             }
         ]
     },

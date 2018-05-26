@@ -6,6 +6,8 @@ import {
     DELETE_DOCUMENT,
     DELETE_DOCUMENT_SUCCESS,
     DOCUMENT_FAILURE,
+    EDIT_DOCUMENT,
+    EDIT_DOCUMENT_SUCCESS,
 } from '../constants/index'
 import {uploadFile, deleteFile} from './files'
 
@@ -23,4 +25,12 @@ export function addDocument(body) {
 
 export function deleteDocument(id) {
     return deleteFile([DELETE_DOCUMENT, DELETE_DOCUMENT_SUCCESS, DOCUMENT_FAILURE], 'document', id)
+}
+
+export function editDocument(body) {
+    return {
+        types: [EDIT_DOCUMENT, EDIT_DOCUMENT_SUCCESS, DOCUMENT_FAILURE],
+        endpoint: 'PutDocument?id=',
+        response: body
+    }
 }

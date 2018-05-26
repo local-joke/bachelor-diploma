@@ -1,4 +1,3 @@
-import moment from 'moment'
 
 //REDUCERS
 
@@ -14,7 +13,7 @@ export function addItem(array, action) {
 }
 
 export function insertItem(array, action) {
-    array.map((item) => {
+    return array.map((item) => {
         if (item.id === action.response[0].id) {
             return action.response[0]
         }

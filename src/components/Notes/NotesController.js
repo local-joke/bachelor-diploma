@@ -16,12 +16,13 @@ import {
     //api
     getNotes,
     addNote,
+    editNote,
     deleteNote,
     //non-api
     setCurrentNote,
     clearCurrentNote,
 } from '../../redux/actions/notes'
-import {getMethod, postMethod, deleteMethod} from '../../api/index'
+import {getMethod, postMethod, deleteMethod, putMethod} from '../../api/index'
 import {withRouter} from 'react-router-dom'
 import {reduxForm} from 'redux-form'
 import {noteFields} from "./noteFields"
@@ -33,6 +34,8 @@ import {CSSTransition} from 'react-transition-group'
 const Note = (props) => {
     const {previewText, openModal, setIsImportant, note, className} = props
 
+    let isImportant = (note.IsImportant === 1)
+
     return <Fade in>
         <div className={className}>
             <div onClick={() => openModal(note.id)}>
@@ -42,7 +45,7 @@ const Note = (props) => {
                 glyph="paperclip"
                 bsSize="large"
                 className="paperclip"
-                onClick={() => setIsImportant(note.id)}/>
+                onClick={() => setIsImportant(note, !isImportant)}/>
         </div>
     </Fade>
 }
@@ -67,8 +70,17 @@ class NotesController extends Component {
         })
     }
 
-    setIsImportant() {
-
+    setIsImportant(note, isImportant) {
+        let body = {
+            id: note.id,
+            idCreator: this.props.auth.currentUser.id,
+            IsImportant: isImportant ? 1 : 0,
+            DateOfCreation: note.DateOfCreation,
+            DateOfChange: getCurrentDate(),
+            HeaderText: note.HeaderText,
+            NoteText: note.NoteText
+        }
+        this.props.putMethod(editNote, body)
     }
 
     closeModal() {
@@ -101,7 +113,7 @@ class NotesController extends Component {
     addNoteHandleSubmit(values) {
         let body = {
             id: 0,
-            idCreator: 1,//this.props.currentUser.profile.Id
+            idCreator: this.props.auth.currentUser.id,
             IsImportant: values.IsImportant ? 1 : 0,
             DateOfCreation: getCurrentDate(),
             DateOfChange: null,
@@ -110,7 +122,7 @@ class NotesController extends Component {
         }
         console.log('SUBMIT BODY', body)
         this.props.postMethod(addNote, body)
-        this.props.clearFields()
+        this.props.reset()
     }
 
     componentDidMount() {
@@ -239,6 +251,7 @@ function mapDispatchToProps(dispatch) {
         getMethod,
         postMethod,
         deleteMethod,
+        putMethod,
         setCurrentNote,
         clearCurrentNote,
     }, dispatch)

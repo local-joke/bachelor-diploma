@@ -80,15 +80,15 @@ class BooksController extends Component {
         let formData = new FormData()
         console.log('DROPPED FILE', this.props.droppedFile)
         formData.append('newFile', droppedFile, droppedFile.name)
+        formData.append('userLogin', this.props.auth.currentUser.Login)
         let body = {
-            idCreator: 1,
+            idCreator: this.props.auth.currentUser.id,
             idFolder: null,
             DateOfCreation: getCurrentDate(),
             Author: values.Author,
             Title: values.Title,
             Publisher: values.Publisher,
             Year: values.Year,
-            URL: 'local-joke' + '/' + droppedFile.name
         }
         formData.append('fileInfo', JSON.stringify(body))
         console.log('FORM DATA', body)

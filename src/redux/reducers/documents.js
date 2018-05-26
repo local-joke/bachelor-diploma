@@ -6,6 +6,8 @@ import {
     DELETE_DOCUMENT,
     DELETE_DOCUMENT_SUCCESS,
     DOCUMENT_FAILURE,
+    EDIT_DOCUMENT,
+    EDIT_DOCUMENT_SUCCESS,
 } from '../constants/index'
 
 import {removeItem, addItem, insertItem} from "../helpers"
@@ -40,6 +42,10 @@ const documents = (state = {
                 isDeleting: true,
             })
 
+        case EDIT_DOCUMENT_SUCCESS:
+            return Object.assign({}, state, {
+                items: insertItem(state.items, action)
+            })
 
         case DELETE_DOCUMENT_SUCCESS:
             return Object.assign({}, state, {

@@ -35,7 +35,7 @@ class NoteModal extends Component {
     handleSubmit(values) {
         let body = {
             id: values.id,
-            idCreator: 1, //idCreator: this.props.currentUser.profile.Id,
+            idCreator: this.props.auth.currentUser.id,
             IsImportant: values.IsImportant ? 1 : 0,
             DateOfCreation: values.DateOfCreation,
             DateOfChange: getCurrentDate(),
@@ -107,6 +107,7 @@ NoteModal = reduxForm({
 })(NoteModal)
 
 NoteModal = connect( state => ({
+    auth: state.auth,
     initialValues: state.notes.currentNote
 }), mapDispatchToProps )((NoteModal))
 
