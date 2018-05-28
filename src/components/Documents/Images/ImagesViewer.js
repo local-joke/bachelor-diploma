@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {render} from 'react-dom';
 import {
     Col,
     Row,
@@ -11,7 +10,7 @@ import {
     ControlLabel,
     Panel
 } from 'react-bootstrap'
-import {deleteDocument} from "../../redux/actions/documents"
+import {deleteDocument} from "../../../redux/actions/documents"
 import Gallery from 'react-photo-gallery';
 import Lightbox from 'react-images';
 import {withRouter} from 'react-router-dom'
@@ -21,72 +20,10 @@ import {
     //non-api
     setCurrentFile,
     clearCurrentFile,
-} from "../../redux/actions/files"
-import {deleteMethod} from "../../api/index"
-
-const popover = (image, deleteImage) => (
-    <Popover id="popover-positioned-scrolling-right">
-        {/*<ControlLabel>Название:</ControlLabel>
-        <div>{image.Name}</div>
-        <ControlLabel>Тип:</ControlLabel>
-        <div>{image.Type}</div>
-        <ControlLabel>Дата создания:</ControlLabel>
-        <div>{image.DateOfCreation}</div>
-        <hr style={{margin: '10px 0'}}/>*/}
-        <div>
-            <Button
-                bsStyle='danger'
-                onClick={() => deleteImage(image.image_id)}
-            >
-                Удалить
-            </Button>
-        </div>
-    </Popover>
-);
-
-class Image extends Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            showOverlay: false
-        }
-
-        this.openOverlay = this.openOverlay.bind(this)
-    }
-
-    openOverlay() {
-        this.setState({
-            showOverlay: true
-        })
-    }
-
-    render() {
-        let index = this.props.index
-        let photo = this.props.photo
-        return <div className="imageContainer">
-            <div
-                onClick={(e) => this.props.onPictureClick(e, this.props.index)}
-            >
-                <img src={photo.src} width="200px" height="200px"/>
-            </div>
-            <OverlayTrigger
-                container={this}
-                trigger="click"
-                rootClose
-                placement="bottom"
-                overlay={popover(photo, (id) => this.props.deleteImage(id))}
-            >
-                <Glyphicon
-                    glyph="option-horizontal"
-                    bsSize="large"
-                    className="imageInfo"
-                    onClick={this.openOverlay}
-                />
-            </OverlayTrigger>
-        </div>
-    }
-}
+} from "../../../redux/actions/files"
+import {deleteMethod} from "../../../api/index"
+import Drop from '../Drop'
+import Image from './Image'
 
 class ImagesViewer extends Component {
 
@@ -101,7 +38,6 @@ class ImagesViewer extends Component {
         this.gotoNext = this.gotoNext.bind(this);
         this.gotoPrevious = this.gotoPrevious.bind(this);
         this.openOverlay = this.openOverlay.bind(this)
-        this.deleteImage = this.deleteImage.bind(this)
     }
 
     openOverlay() {
@@ -127,14 +63,17 @@ class ImagesViewer extends Component {
 
     getImages() {
         let images = [];
-        this.props.documents && this.props.documents.forEach((doc) => {
-            if ((doc.Type === 'png') || (doc.Type === 'jpg')) {
-                images.push({
-                    src: doc.URL,
-                    width: 1,
-                    height: 1,
-                    image_id: doc.id
-                })
+        this.props.documents.items && this.props.documents.items.forEach((doc) => {
+            console.log('doc', doc)
+            if (doc.idFolder === this.props.currentFolder) {
+                if ((doc.Type === 'png') || (doc.Type === 'jpg')) {
+                    images.push({
+                        src: doc.URL,
+                        width: 1,
+                        height: 1,
+                        image: doc
+                    })
+                }
             }
         })
         return images
@@ -148,25 +87,46 @@ class ImagesViewer extends Component {
         this.props.setCurrentFile(this.props.currentFile.file + 1)
     }
 
-    deleteImage(id){
-        console.log('DELETE',id)
-        //this.props.deleteMethod(deleteDocument, id)
-    }
-
     componentWillUnmount(){
         this.props.clearCurrentFile()
     }
 
     render() {
+
+        let {
+            documents,
+            onDrop,
+            clearDrop,
+            addImageHandler,
+            droppedFile,
+            deleteImage,
+            moveOptions,
+            moveImage,
+            higherLevelFolder
+        } = this.props
+
         return (
             <div>
+                <Drop
+                    isLoading={documents.isAdding}
+                    onDrop={onDrop}
+                    droppedFile={droppedFile}
+                    clearDrop={clearDrop}
+                    accept='.png,.jpg,.jpeg'
+                    addDocumentHandler={addImageHandler}
+                    className='imageDropzoneContainer'
+                    dropzoneClassName="imageDropzone"
+                />
                 <Gallery
                     photos={this.getImages()}
                     ImageComponent={({ index, onClick, photo, margin }) => <Image
                         index={index}
                         photo={photo}
                         onPictureClick={this.openLightbox}
-                        deleteImage={this.deleteImage}
+                        deleteImage={deleteImage}
+                        moveOptions={moveOptions}
+                        moveImage={moveImage}
+                        higherLevelFolder={higherLevelFolder}
                     />}
                 />
                 <Lightbox images={this.getImages()}
@@ -192,7 +152,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentFile: state.currentFile,
-        documents: state.documents.items
+        currentFolder:  state.folders.currentFolder ? state.folders.currentFolder.id : 0,
+        documents: state.documents
     }
 }
 

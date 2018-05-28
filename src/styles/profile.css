@@ -1,0 +1,12 @@
+.profileContainer{
+
+}
+
+.userPic{
+    width:60px;
+    height:60px;
+    display: block;
+    background-color: white;
+    z-index: 2002;
+}
+

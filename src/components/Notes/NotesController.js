@@ -28,7 +28,8 @@ import {reduxForm} from 'redux-form'
 import {noteFields} from "./noteFields"
 import NoteModal from './NoteModal'
 import {getCurrentDate} from '../../redux/helpers'
-
+import Preloader from '../common/Preloader'
+import {checkString} from "../../redux/helpers"
 import {CSSTransition} from 'react-transition-group'
 
 const Note = (props) => {
@@ -77,7 +78,7 @@ class NotesController extends Component {
             IsImportant: isImportant ? 1 : 0,
             DateOfCreation: note.DateOfCreation,
             DateOfChange: getCurrentDate(),
-            HeaderText: note.HeaderText,
+            HeaderText: checkString(note.HeaderText),
             NoteText: note.NoteText
         }
         this.props.putMethod(editNote, body)
@@ -92,7 +93,7 @@ class NotesController extends Component {
 
     importantExists() {
         let exists = false
-        this.props.notes && this.props.notes.forEach((note) => {
+        this.props.notes.items && this.props.notes.items.forEach((note) => {
             if (note.IsImportant) {
                 exists = true
             }
@@ -102,7 +103,7 @@ class NotesController extends Component {
 
     isEverythingImportant() {
         let check = true
-        this.props.notes && this.props.notes.forEach((note) => {
+        this.props.notes.items && this.props.notes.items.forEach((note) => {
             if (!note.IsImportant) {
                 check = false
             }
@@ -117,7 +118,7 @@ class NotesController extends Component {
             IsImportant: values.IsImportant ? 1 : 0,
             DateOfCreation: getCurrentDate(),
             DateOfChange: null,
-            HeaderText: values.HeaderText,
+            HeaderText: checkString(values.HeaderText),
             NoteText: values.NoteText
         }
         console.log('SUBMIT BODY', body)
@@ -130,7 +131,7 @@ class NotesController extends Component {
     }
 
     renderNotes(isImportant) {
-        this.props.notes && this.props.notes.map((note, key) => {
+        this.props.notes.items && this.props.notes.items.map((note, key) => {
             if (note.IsImportant === isImportant) {
                 let previewText = (note.NoteText.length > 50) ? note.NoteText.substr(0, 48) + '...' : note.NoteText
                 let className = note.IsImportant ? 'note-important' : 'note'
@@ -150,76 +151,52 @@ class NotesController extends Component {
 
     render() {
 
-        const {handleSubmit, pristine, reset, submitting} = this.props
-        return <Col xs={12}>
-            <Row>
-                <form onSubmit={this.props.handleSubmit(this.addNoteHandleSubmit)}>
-                    <Panel id="collapsible-panel-example-2" defaultExpanded>
-                        <Panel.Heading style={{backgroundColor: 'white'}}>
-                            <Panel.Title toggle>
-                                Создать заметку
-                            </Panel.Title>
-                        </Panel.Heading>
-                        <Panel.Collapse>
-                            <Panel.Body>
-                                {noteFields()}
-                            </Panel.Body>
-                            <Panel.Footer style={{textAlign: 'right', backgroundColor: 'white'}}>
-                                <Button
-                                    style={{marginRight: '5px'}}
-                                    type="button"
-                                    disabled={pristine || submitting}
-                                    onClick={reset}
-                                    bsStyle="default">
-                                    Очистить
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    disabled={pristine || submitting}
-                                    bsStyle="success">
-                                    Сохранить
-                                </Button>
-                            </Panel.Footer>
-                        </Panel.Collapse>
-                    </Panel>
-                </form>
-            </Row>
-            {/*<CSSTransition
+        const {handleSubmit, pristine, reset, submitting, notes} = this.props
+
+        return <Preloader isLoading={notes.isFetching}>
+            <Col xs={12}>
+                <Row>
+                    <form onSubmit={this.props.handleSubmit(this.addNoteHandleSubmit)}>
+                        <Panel id="collapsible-panel-example-2" defaultExpanded>
+                            <Panel.Heading style={{backgroundColor: 'white'}}>
+                                <Panel.Title toggle>
+                                    Создать заметку
+                                </Panel.Title>
+                            </Panel.Heading>
+                            <Panel.Collapse>
+                                <Panel.Body>
+                                    {noteFields()}
+                                </Panel.Body>
+                                <Panel.Footer style={{textAlign: 'right', backgroundColor: 'white'}}>
+                                    <Button
+                                        style={{marginRight: '5px'}}
+                                        type="button"
+                                        disabled={pristine || submitting}
+                                        onClick={reset}
+                                        bsStyle="default">
+                                        Очистить
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        disabled={pristine || submitting}
+                                        bsStyle="success">
+                                        Сохранить
+                                    </Button>
+                                </Panel.Footer>
+                            </Panel.Collapse>
+                        </Panel>
+                    </form>
+                </Row>
+                {/*<CSSTransition
                 timeout={300}
               classNames="example"
               unmountOnExit
               >*/}
-            {(this.importantExists()) && <Row>
-                <ControlLabel>Важные</ControlLabel>
-                <div>
-                    {this.props.notes && this.props.notes.map((note, key) => {
-                        if (note.IsImportant) {
-                            let previewText = (note.NoteText.length > 50) ? note.NoteText.substr(0, 48) + '...' : note.NoteText
-                            let className = note.IsImportant ? 'note-important' : 'note'
-                            return <Note
-                                key={key}
-                                previewText={previewText}
-                                openModal={this.openModal}
-                                note={note}
-                                className={className}
-                                setIsImportant={this.setIsImportant}
-                            />
-                        }
-                    })}
-                </div>
-            </Row>}
-            {/* </CSSTransition>*/}
-            <Row>
-                {!this.isEverythingImportant() &&
-                <div>
-                    <ControlLabel>Все заметки</ControlLabel>
-                    {/*<CSSTransitionGroup
-                        transitionName="example"
-                        transitionEnterTimeout={500}
-                        transitionLeaveTimeout={300}>*/}
+                {(this.importantExists()) && <Row>
+                    <ControlLabel>Важные</ControlLabel>
                     <div>
-                        {this.props.notes && this.props.notes.map((note, key) => {
-                            if (!note.IsImportant) {
+                        {notes.items && notes.items.map((note, key) => {
+                            if (note.IsImportant) {
                                 let previewText = (note.NoteText.length > 50) ? note.NoteText.substr(0, 48) + '...' : note.NoteText
                                 let className = note.IsImportant ? 'note-important' : 'note'
                                 return <Note
@@ -233,16 +210,43 @@ class NotesController extends Component {
                             }
                         })}
                     </div>
-                    {/*</CSSTransitionGroup>*/}
-                </div>
-                }
-            </Row>
-            <NoteModal
-                showModal={this.state.showModal}
-                modalCloseHandler={this.closeModal}
-                size="large"
-            />
-        </Col>
+                </Row>}
+                {/* </CSSTransition>*/}
+                <Row>
+                    {!this.isEverythingImportant() &&
+                    <div>
+                        <ControlLabel>Все заметки</ControlLabel>
+                        {/*<CSSTransitionGroup
+                        transitionName="example"
+                        transitionEnterTimeout={500}
+                        transitionLeaveTimeout={300}>*/}
+                        <div>
+                            {notes.items && notes.items.map((note, key) => {
+                                if (!note.IsImportant) {
+                                    let previewText = (note.NoteText.length > 50) ? note.NoteText.substr(0, 48) + '...' : note.NoteText
+                                    let className = note.IsImportant ? 'note-important' : 'note'
+                                    return <Note
+                                        key={key}
+                                        previewText={previewText}
+                                        openModal={this.openModal}
+                                        note={note}
+                                        className={className}
+                                        setIsImportant={this.setIsImportant}
+                                    />
+                                }
+                            })}
+                        </div>
+                        {/*</CSSTransitionGroup>*/}
+                    </div>
+                    }
+                </Row>
+                <NoteModal
+                    showModal={this.state.showModal}
+                    modalCloseHandler={this.closeModal}
+                    size="large"
+                />
+            </Col>
+        </Preloader>
     }
 }
 
@@ -260,7 +264,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         auth: state.auth,
-        notes: state.notes.items
+        notes: state.notes
     }
 }
 

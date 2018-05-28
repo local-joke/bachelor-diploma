@@ -31,6 +31,7 @@ import {reduxForm, Field} from 'redux-form'
 import {getCurrentDate} from '../../redux/helpers'
 import Folder from './Folder'
 import FolderModal from './FolderModal'
+import Preloader from '../common/Preloader'
 
 class Folders extends Component {
 
@@ -50,7 +51,7 @@ class Folders extends Component {
     }
 
     createFolder() {
-        if (this.folderName.value) {
+        if (this.folderName.value && this.folderName.value.length < 45) {
             let body = {
                 idCreator: this.props.auth.currentUser.id,
                 idParentFolder: this.props.folders.currentFolder ? this.props.folders.currentFolder.id : 0,
@@ -58,18 +59,19 @@ class Folders extends Component {
                 DateOfChange: null,
                 Name: this.folderName.value,
             }
-            console.log('SUBMIT BODY', body)
             this.props.postMethod(addFolder, body)
             this.folderName.value = ''
+        }
+        else {
+            alert("У папки занадто довга назва!")
         }
     }
 
     deleteFolder(id) {
-        console.log('DELETE', id)
         this.props.deleteMethod(deleteFolder, id)
     }
 
-    moveFolder(folder, destinationFolderId){
+    moveFolder(folder, destinationFolderId) {
         let body = {
             id: folder.id,
             idCreator: this.props.auth.currentUser.id,
@@ -78,7 +80,6 @@ class Folders extends Component {
             DateOfChange: getCurrentDate(),
             Name: folder.Name
         }
-        console.log('put', body)
         this.props.putMethod(editFolder, body)
     }
 
@@ -129,57 +130,58 @@ class Folders extends Component {
     }
 
     render() {
-        console.log('RENDER', this.props.folders.currentFolder)
-        return <Col xs={12}>
-            <Row>
-                <ControlLabel>Папки: {this.state.currentPath}</ControlLabel>
-                <div>
-                    {this.props.folders.currentFolder &&
-                    <div
-                        className="folderBackButton"
-                        onClick={this.goBack}
-                    >
-                        <Glyphicon
-                            glyph="triangle-left"
-                            bsSize="large"
-                        />
-                    </div>}
-                    <div className="emptyFolderContainer">
-                        <div className='emptyIconContainer'>
+        return <Preloader isLoading={this.props.folders.isFetching}>
+            <Col xs={12}>
+                <Row>
+                    <ControlLabel>Папки: {this.state.currentPath}</ControlLabel>
+                    <div>
+                        {this.props.folders.currentFolder &&
+                        <div
+                            className="folderBackButton"
+                            onClick={this.goBack}
+                        >
                             <Glyphicon
-                                glyph="folder-open"
+                                glyph="triangle-left"
                                 bsSize="large"
-                                onClick={this.createFolder}
                             />
+                        </div>}
+                        <div className="emptyFolderContainer">
+                            <div className='emptyIconContainer'>
+                                <Glyphicon
+                                    glyph="folder-open"
+                                    bsSize="large"
+                                    onClick={this.createFolder}
+                                />
+                            </div>
+                            <FormGroup bsSize='small'>
+                                <FormControl
+                                    inputRef={(c) => this.folderName = (c)}
+                                    placeholder='Назва'
+                                />
+                            </FormGroup>
                         </div>
-                        <FormGroup bsSize='small'>
-                            <FormControl
-                                inputRef={(c) => this.folderName = (c)}
-                                placeholder='Назва'
-                            />
-                        </FormGroup>
+                        {this.props.folders.items && this.props.folders.items.map((item, key) => {
+                            if (item.idParentFolder === (this.props.folders.currentFolder ? this.props.folders.currentFolder.id : 0))
+                                return <Folder
+                                    key={key}
+                                    folder={item}
+                                    onClick={this.setCurrentFolder}
+                                    openModal={this.openModal}
+                                    deleteFolder={this.deleteFolder}
+                                    moveOptions={this.getMoveOptions(item.id)}
+                                    moveFolder={this.moveFolder}
+                                    higherLevelFolder={this.props.folders.currentFolder && this.props.folders.currentFolder.idParentFolder}
+                                />
+                        })}
                     </div>
-                    {this.props.folders.items && this.props.folders.items.map((item, key) => {
-                        if (item.idParentFolder === (this.props.folders.currentFolder ? this.props.folders.currentFolder.id : 0))
-                            return <Folder
-                                key={key}
-                                folder={item}
-                                onClick={this.setCurrentFolder}
-                                openModal={this.openModal}
-                                deleteFolder={this.deleteFolder}
-                                moveOptions={this.getMoveOptions(item.id)}
-                                moveFolder={this.moveFolder}
-                                higherLevelFolder={this.props.folders.currentFolder && this.props.folders.currentFolder.idParentFolder}
-                            />
-                    })}
-                </div>
-            </Row>
-            <FolderModal
-                showModal={this.state.showModal}
-                modalCloseHandler={this.closeModal}
-                size="small"
-            />
-        </Col>
+                </Row>
+                <FolderModal
+                    showModal={this.state.showModal}
+                    modalCloseHandler={this.closeModal}
+                    size="small"
+                />
+            </Col>
+        </Preloader>
     }
 }
 

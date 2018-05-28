@@ -23,6 +23,11 @@ export function insertItem(array, action) {
 
 //OTHER
 
+export function checkString(str){
+    if(str) return str
+    else return ''
+}
+
 export function getCurrentDate() {
 
     function getCorrectMonth(month) {

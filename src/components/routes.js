@@ -3,7 +3,7 @@ import MainPage from './MainPage'
 import NotesController from './Notes/NotesController'
 import BooksController from './Books/BooksController'
 import DocumentsController from './Documents/DocumentsController'
-import ImagesLink from './Documents/ImagesLink'
+import UserProfile from './UserProfile'
 import {Route, Redirect} from 'react-router'
 
 export const RouteWithSubRoutes = props => {
@@ -29,6 +29,10 @@ export const routes = [
         component: MainPage,
         exact: true,
         routes: [
+            {
+                path: '/profile',
+                component: UserProfile
+            },
            {
                 path: "/notes",
                 component: NotesController
@@ -43,7 +47,7 @@ export const routes = [
             },
             {
                 path: '/images',
-                component: ImagesLink
+                component: () => <DocumentsController imagesMode={true}/>
             }
         ]
     },

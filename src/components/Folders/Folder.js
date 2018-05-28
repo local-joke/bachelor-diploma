@@ -42,6 +42,7 @@ const popover = (folder, moveOptions, deleteFolder, openModal, moveFolder, highe
         <div style={{textAlign: 'center'}}>
             <Button
                 bsStyle='danger'
+                style={{marginRight: '5px'}}
                 onClick={() => deleteFolder(folder.id)}
             >
                 Удалить

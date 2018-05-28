@@ -6,19 +6,32 @@ import '../../styles/notes.css'
 import {connect} from 'react-redux'
 import FileViewer from 'react-file-viewer'
 import {ReactReader} from 'react-reader'
+import PDFViewer from '../common/PDFViewer'
+
+const acceptedTypes = ['docx', 'png', 'jpeg', 'jpg']
 
 const renderComponent = (file) => {
-    console.log('FILE', file)
     if (file.hasOwnProperty('Type')) {
-        switch (file.Type) {
-            case 'docx':
-                return <FileViewer
-                    fileType={file.Type}
-                    filePath={file.URL}
-                />
-            case 'pdf':
-                return <div></div>
+        let checkType = false
+        acceptedTypes.forEach(type => {
+            if(type === file.Type){
+                checkType = true
+            }
+        })
+        if (checkType) {
+            console.log('FILE', file)
+            return <FileViewer
+                fileType={file.Type}
+                filePath={file.URL}
+            />
         }
+        else if(file.Type === 'pdf'){
+
+            return <PDFViewer
+                file={file.URL}
+            />
+        }
+        else return <h3>Вибачте, Формат файлу не підтримується</h3>
     }
     else if (file.hasOwnProperty('Title')) {
         return <ReactReader

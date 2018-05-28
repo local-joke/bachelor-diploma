@@ -16,6 +16,7 @@ import {
 } from '../../redux/actions/notes'
 import { deleteMethod, putMethod } from '../../api/index'
 import {getCurrentDate} from '../../redux/helpers'
+import {checkString} from "../../redux/helpers"
 
 class NoteModal extends Component {
     constructor(props) {
@@ -39,7 +40,7 @@ class NoteModal extends Component {
             IsImportant: values.IsImportant ? 1 : 0,
             DateOfCreation: values.DateOfCreation,
             DateOfChange: getCurrentDate(),
-            HeaderText: values.HeaderText,
+            HeaderText: checkString(values.HeaderText),
             NoteText: values.NoteText
         }
         console.log(body)

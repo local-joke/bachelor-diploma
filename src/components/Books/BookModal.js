@@ -16,6 +16,7 @@ import {
 } from '../../redux/actions/books'
 import { deleteMethod, putMethod } from '../../api/index'
 import {getCurrentDate} from '../../redux/helpers'
+import {checkString} from "../../redux/helpers"
 
 class BookModal extends Component {
     constructor(props) {
@@ -36,10 +37,10 @@ class BookModal extends Component {
         let body = {
             id: values.id,
             DateOfChange: getCurrentDate(),
-            Author: values.Author,
-            Title: values.Title,
-            Publisher: values.Publisher,
-            Year: values.Year,
+            Author: checkString(values.Author),
+            Title: checkString(values.Title),
+            Publisher: checkString(values.Publisher),
+            Year: checkString(values.Year),
         }
         console.log(body)
         this.props.putMethod(editBook, body)

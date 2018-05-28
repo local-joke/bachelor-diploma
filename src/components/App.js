@@ -13,6 +13,7 @@ import {
 import {
     postMethod,
 } from '../api/index'
+import Preloader from './common/Preloader'
 
 class App extends Component {
 
@@ -20,9 +21,9 @@ class App extends Component {
         this.props.checkAuth()
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
         console.log('APP', nextProps.auth.isAuthenticated)
-        if(this.props.auth.isAuthenticated !== nextProps.auth.isAuthenticated) {
+        if (this.props.auth.isAuthenticated !== nextProps.auth.isAuthenticated) {
             if (nextProps.auth.isAuthenticated) {
                 let body = {
                     Login: localStorage.getItem('user_name'),
@@ -35,16 +36,18 @@ class App extends Component {
 
     render() {
         return (
-            <Router>
-                <Switch>
-                    <Route path='/signUp' component={Registration}/>
-                    <Route path='/login' component={Login}/>
-                    <RouteWithSubRoutes
-                        route={routes[0]}
-                        isAuthenticated={this.props.auth.isAuthenticated}
-                    />
-                </Switch>
-            </Router>
+            <Preloader isLoading={this.props.auth.isFetching}>
+                <Router>
+                    <Switch>
+                        <Route path='/signUp' component={Registration}/>
+                        <Route path='/login' component={Login}/>
+                        <RouteWithSubRoutes
+                            route={routes[0]}
+                            isAuthenticated={this.props.auth.isAuthenticated}
+                        />
+                    </Switch>
+                </Router>
+            </Preloader>
         );
     }
 }

@@ -22,6 +22,7 @@ import {
 import {
     postMethod,
 } from '../../api/index'
+import {maxLength45, required} from '../../validations'
 
 class Login extends Component {
 
@@ -57,6 +58,7 @@ class Login extends Component {
                             component={formInput}
                             placeholder="username"
                             type="text"
+                            validate={[required, maxLength45]}
                             label="Логін"
                         />
                         <Field
@@ -64,6 +66,7 @@ class Login extends Component {
                             component={formInput}
                             placeholder="userpassword"
                             type="password"
+                            validate={[required, maxLength45]}
                             label="Пароль"
                         />
                     </Panel.Body>

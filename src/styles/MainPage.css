@@ -1,30 +1,53 @@
-.catalogs-column{
+.catalogs-column {
     background-color: #f8f8f8;
     height: 94.5vh;
     font-family: sans-serif;
     border-right: 1px solid #e7e7e7;;
 }
-.catalogs-item{
+
+.catalogs-item {
     height: 40px;
     background-color: #f8f8f8;
 
     font-size: 16px;
     padding: 12px 0 0 12px;
 }
-.catalogs-item:hover{
+
+.catalogs-item:hover {
     background-color: #ccc;
     cursor: pointer;
 }
 
-.items-background{
+.items-background {
+    position: fixed;
     background-color: #eee;
-    height: 94.5vh;
-    padding: 10px;
     overflow-y: auto;
+    height: 100%;
+    width: 100%;
     overflow-x: hidden;
+    margin-top: -1px;
+    margin-left: 25px;
+    padding: 10px 30px 10px 10px;
+    z-index: 900;
 }
 
-.container{
+@media ( min-width: 1330px) {
+    .items-background {
+        margin-left: 185px;
+        padding-right: 208px;
+    }
+}
+
+@media ( max-width: 768px) {
+    .items-background {
+        margin-left: -15px;
+        margin-top: 51px;
+        padding-right: 10px;
+        z-index: 0;
+    }
+}
+
+.container {
     margin-left: 0;
     margin-right: 0;
     width: 100%;

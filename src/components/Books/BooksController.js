@@ -35,21 +35,23 @@ import {bookFields} from "./bookFields"
 import {getCurrentDate} from "../../redux/helpers"
 import BookModal from './BookModal'
 import Dropzone from 'react-dropzone'
-import { reduxForm, reset} from 'redux-form'
+import {reduxForm, reset} from 'redux-form'
 //import {CSSTransitionGroup} from 'react-transition-group'
+import Preloader from '../common/Preloader'
+import {checkString} from "../../redux/helpers"
 
 class Book extends Component {
-    render(){
+    render() {
         let book = this.props.book
         let previewText = (book.Title.length > 40) ? book.Title.substr(0, 38) + '...' : book.Title
         return <div className="book-container">
             <div className="book-left-part">
-                    <Glyphicon
-                        glyph="option-vertical"
-                        bsSize="large"
-                        className="paperclip"
-                        onClick={() => this.props.openEditModal(book.id)}
-                    />
+                <Glyphicon
+                    glyph="option-vertical"
+                    bsSize="large"
+                    className="paperclip"
+                    onClick={() => this.props.openEditModal(book.id)}
+                />
             </div>
             <div className="book" onClick={() => this.props.openViewModal(book)}>
                 <h5>{book.Author && book.Author}</h5>
@@ -85,10 +87,10 @@ class BooksController extends Component {
             idCreator: this.props.auth.currentUser.id,
             idFolder: null,
             DateOfCreation: getCurrentDate(),
-            Author: values.Author,
-            Title: values.Title,
-            Publisher: values.Publisher,
-            Year: values.Year,
+            Author: checkString(values.Author),
+            Title: checkString(values.Title),
+            Publisher: checkString(values.Publisher),
+            Year: checkString(values.Year),
         }
         formData.append('fileInfo', JSON.stringify(body))
         console.log('FORM DATA', body)
@@ -102,12 +104,12 @@ class BooksController extends Component {
         this.props.setDroppedFile(acceptedFiles[0])
     }
 
-    resetNewBookData(){
+    resetNewBookData() {
         this.props.reset()
         this.props.clearDroppedFile()
     }
 
-    openEditModal(id){
+    openEditModal(id) {
         this.props.setCurrentBook(id)
         this.setState({
             showEditModal: true
@@ -135,59 +137,80 @@ class BooksController extends Component {
         })
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.getMethod(getBooks, this.props.auth.currentUser.id)
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.props.clearDroppedFile()
     }
 
     render() {
 
-        const {handleSubmit, pristine, submitting} = this.props
-        return <Col xs={12}>
-            <Row>
-                <form onSubmit={handleSubmit(this.addBookHandleSubmit)}>
-                <Panel id="collapsible-panel-example-2">
-                    <Panel.Heading style={{backgroundColor: 'white'}}>
-                        <Panel.Title toggle>
-                            Добавить книгу
-                        </Panel.Title>
-                    </Panel.Heading>
-                    <Panel.Collapse>
-                        <Panel.Body>
-                            {bookFields()}
-                            <Dropzone onDrop={this.onDrop}>
-                                <p>Try dropping some files here, or click to select files to upload.</p>
-                            </Dropzone>
-                        </Panel.Body>
-                        <Panel.Footer style={{textAlign: 'right', backgroundColor: 'white'}}>
-                            <Button
-                                style={{marginRight: '5px'}}
-                                type="button"
-                                disabled={pristine || submitting}
-                                onClick={this.resetNewBookData}
-                                bsStyle="default">
-                                Очистить
-                            </Button>
-                            <Button
-                                type="submit"
-                                disabled={pristine || submitting}
-                                bsStyle="success">
-                                Сохранить
-                            </Button>
-                        </Panel.Footer>
-                    </Panel.Collapse>
-                </Panel>
-                </form>
-            </Row>
-            <Row>
-                {/*<CSSTransitionGroup
-                    transitionName="example"
-                    transitionEnterTimeout={500}
-                    transitionLeaveTimeout={300}>*/}
-                    {this.props.books && this.props.books.map((book, key) => {
+        const {handleSubmit, pristine, submitting, books, droppedFile} = this.props
+        return <Preloader isLoading={books.isFetching}>
+            <Col xs={12}>
+                <Row>
+                    <form onSubmit={handleSubmit(this.addBookHandleSubmit)}>
+                        <Panel id="collapsible-panel-example-2">
+                            <Panel.Heading style={{backgroundColor: 'white'}}>
+                                <Panel.Title toggle>
+                                    Добавить книгу
+                                </Panel.Title>
+                            </Panel.Heading>
+                            <Panel.Collapse>
+                                <Panel.Body>
+                                    <Col xs={12} sm={6}>
+                                        <Row>
+                                            {bookFields()}
+                                        </Row>
+                                    </Col>
+                                    <Col xs={12} sm={6}>
+                                        <Row>
+                                            <div className="bookDropzoneContainer">
+                                                <Preloader isLoading={books.isAdding}>
+                                                    <Dropzone
+                                                        onDropAccepted={this.onDrop}
+                                                        className="bookDropzone"
+                                                        multiple={false}
+                                                        accept=".epub"
+                                                    >
+                                                        {droppedFile ?
+                                                            <li>
+                                                                {((droppedFile.name.length > 16) ?
+                                                                    droppedFile.name.substr(0, 13) + '...'
+                                                                    : droppedFile.name)}
+                                                            </li> :
+                                                            <p>Перетягніть файл сюди або натисніть, щоб вибрати (.epub)</p>
+                                                        }
+                                                    </Dropzone>
+                                                </Preloader>
+                                            </div>
+                                        </Row>
+                                    </Col>
+                                </Panel.Body>
+                                <Panel.Footer style={{textAlign: 'right', backgroundColor: 'white'}}>
+                                    <Button
+                                        style={{marginRight: '5px'}}
+                                        type="button"
+                                        disabled={pristine || submitting}
+                                        onClick={this.resetNewBookData}
+                                        bsStyle="default">
+                                        Очистить
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        disabled={pristine || submitting}
+                                        bsStyle="success">
+                                        Сохранить
+                                    </Button>
+                                </Panel.Footer>
+                            </Panel.Collapse>
+                        </Panel>
+                    </form>
+                </Row>
+                <Row>
+                    {books.items && books.items.map((book, key) => {
                         return <Book
                             key={key}
                             book={book}
@@ -195,19 +218,19 @@ class BooksController extends Component {
                             openEditModal={this.openEditModal}
                         />
                     })}
-                {/*</CSSTransitionGroup>*/}
-            </Row>
-            <BookModal
-                size="large"
-                showModal={this.state.showEditModal}
-                modalCloseHandler={this.closeEditModal}
-            />
-            <FileViewModal
-                size="large"
-                show={this.state.showViewModal}
-                modalCloseHandler={this.closeViewModal}
-            />
-        </Col>
+                </Row>
+                <BookModal
+                    size="large"
+                    showModal={this.state.showEditModal}
+                    modalCloseHandler={this.closeEditModal}
+                />
+                <FileViewModal
+                    size="large"
+                    show={this.state.showViewModal}
+                    modalCloseHandler={this.closeViewModal}
+                />
+            </Col>
+        </Preloader>
     }
 }
 
@@ -228,8 +251,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         auth: state.auth,
-        droppedFile : state.currentFile.droppedFile,
-        books: state.books.items
+        droppedFile: state.currentFile.droppedFile,
+        books: state.books
     }
 }
 

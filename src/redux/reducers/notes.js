@@ -14,6 +14,14 @@ import {
 
 import {removeItem, addItem, insertItem} from "../helpers"
 
+const sortFunction = (a, b) => {
+
+    a = new Date(a.DateOfChange ? a.DateOfChange : a.DateOfCreation)
+    b = new Date(b.DateOfChange ? b.DateOfChange : b.DateOfCreation)
+
+    return a>b ? -1 : a<b ? 1 : 0;
+}
+
 const notes = (state = {
     currentNote: null,
     isFetching: true,
@@ -31,7 +39,7 @@ const notes = (state = {
         case FETCH_NOTES_SUCCESS:
             return Object.assign({}, state, {
                 isFetching: false,
-                items: action.response
+                items: action.response && action.response.sort(sortFunction)
             });
 
         case GET_CURRENT_NOTE:
@@ -54,7 +62,7 @@ const notes = (state = {
         case ADD_NOTE_SUCCESS:
             return Object.assign({}, state, {
                 isAdding: false,
-                items: addItem(state.items, action)
+                items: addItem(state.items, action).sort(sortFunction)
             })
 
         case DELETE_NOTE:
@@ -70,7 +78,7 @@ const notes = (state = {
 
         case EDIT_NOTE_SUCCESS:
             return Object.assign({}, state, {
-                items: insertItem(state.items, action)
+                items: insertItem(state.items, action).sort(sortFunction)
             })
 
         case CLEAR_CURRENT_NOTE:

@@ -18,6 +18,7 @@ import {
 import {
     postMethod,
 } from '../../api/index'
+import {maxLength45} from '../../validations'
 
 const required = value => (value ? undefined : "Поле є обов'язковим")
 
@@ -28,11 +29,6 @@ const emailCheck = value =>
     value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
         ? 'Некоректна адреса'
         : undefined
-
-const maxLength = max => value =>
-    value && value.length > max ? `Логін має бути не довшим ніж ${max} символів` : undefined
-
-const maxLength25 = maxLength(15)
 
 const minLength = min => value =>
     value && value.length < min ? `Пароль має бути не коротше ${min} символів` : undefined
@@ -86,7 +82,7 @@ class Registration extends Component {
                                 placeholder="Логін"
                                 type="text"
                                 label="Логін"
-                                validate={[required, maxLength25, loginCheck]}
+                                validate={[required, maxLength45, loginCheck]}
                             />
                             <Field
                                 name="Password"
@@ -94,7 +90,7 @@ class Registration extends Component {
                                 placeholder="*********"
                                 type="password"
                                 label="Пароль"
-                                validate={[required, minLength6]}
+                                validate={[required, minLength6, maxLength45]}
                             />
                             <Field
                                 name="PasswordRepeat"
@@ -110,7 +106,7 @@ class Registration extends Component {
                                 placeholder="Ім'я"
                                 type="text"
                                 label="Ім'я"
-                                validate={[required]}
+                                validate={[required, maxLength45]}
                             />
                             <Field
                                 name="Email"
@@ -118,7 +114,7 @@ class Registration extends Component {
                                 placeholder="example@gmail.com"
                                 type="text"
                                 label="Електронна пошта"
-                                validate={[required,emailCheck]}
+                                validate={[required,emailCheck, maxLength45]}
                             />
                         </Panel.Body>
                         <Panel.Footer style={{textAlign: 'right', backgroundColor: 'white'}}>
