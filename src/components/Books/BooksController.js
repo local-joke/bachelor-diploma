@@ -80,7 +80,6 @@ class BooksController extends Component {
     addBookHandleSubmit(values) {
         let droppedFile = this.props.droppedFile
         let formData = new FormData()
-        console.log('DROPPED FILE', this.props.droppedFile)
         formData.append('newFile', droppedFile, droppedFile.name)
         formData.append('userLogin', this.props.auth.currentUser.Login)
         let body = {
@@ -93,14 +92,12 @@ class BooksController extends Component {
             Year: checkString(values.Year),
         }
         formData.append('fileInfo', JSON.stringify(body))
-        console.log('FORM DATA', body)
         this.props.postMethod(addBook, formData)
         this.props.clearDroppedFile()
         this.props.clearFields()
     }
 
     onDrop(acceptedFiles) {
-        console.log('ON DROP', acceptedFiles)
         this.props.setDroppedFile(acceptedFiles[0])
     }
 
@@ -155,56 +152,56 @@ class BooksController extends Component {
                         <Panel id="collapsible-panel-example-2">
                             <Panel.Heading style={{backgroundColor: 'white'}}>
                                 <Panel.Title toggle>
-                                    Добавить книгу
+                                    Додати книгу
                                 </Panel.Title>
                             </Panel.Heading>
                             <Panel.Collapse>
-                                <Panel.Body>
-                                    <Col xs={12} sm={6}>
-                                        <Row>
-                                            {bookFields()}
-                                        </Row>
-                                    </Col>
-                                    <Col xs={12} sm={6}>
-                                        <Row>
-                                            <div className="bookDropzoneContainer">
-                                                <Preloader isLoading={books.isAdding}>
-                                                    <Dropzone
-                                                        onDropAccepted={this.onDrop}
-                                                        className="bookDropzone"
-                                                        multiple={false}
-                                                        accept=".epub"
-                                                    >
-                                                        {droppedFile ?
-                                                            <li>
-                                                                {((droppedFile.name.length > 16) ?
-                                                                    droppedFile.name.substr(0, 13) + '...'
-                                                                    : droppedFile.name)}
-                                                            </li> :
-                                                            <p>Перетягніть файл сюди або натисніть, щоб вибрати (.epub)</p>
-                                                        }
-                                                    </Dropzone>
-                                                </Preloader>
-                                            </div>
-                                        </Row>
-                                    </Col>
-                                </Panel.Body>
-                                <Panel.Footer style={{textAlign: 'right', backgroundColor: 'white'}}>
-                                    <Button
-                                        style={{marginRight: '5px'}}
-                                        type="button"
-                                        disabled={pristine || submitting}
-                                        onClick={this.resetNewBookData}
-                                        bsStyle="default">
-                                        Очистить
-                                    </Button>
-                                    <Button
-                                        type="submit"
-                                        disabled={pristine || submitting}
-                                        bsStyle="success">
-                                        Сохранить
-                                    </Button>
-                                </Panel.Footer>
+                                <Preloader isLoading={books.isAdding}>
+                                    <Panel.Body>
+                                        <Col xs={12} sm={6}>
+                                            <Row>
+                                                {bookFields()}
+                                            </Row>
+                                        </Col>
+                                        <Col xs={12} sm={6}>
+                                            <Row>
+                                                <div className="bookDropzoneContainer">
+                                                    = <Dropzone
+                                                    onDropAccepted={this.onDrop}
+                                                    className="bookDropzone"
+                                                    multiple={false}
+                                                    accept=".epub"
+                                                >
+                                                    {droppedFile ?
+                                                        <li>
+                                                            {((droppedFile.name.length > 16) ?
+                                                                droppedFile.name.substr(0, 13) + '...'
+                                                                : droppedFile.name)}
+                                                        </li> :
+                                                        <p>Перетягніть файл сюди або натисніть, щоб вибрати (.epub)</p>
+                                                    }
+                                                </Dropzone>
+                                                </div>
+                                            </Row>
+                                        </Col>
+                                    </Panel.Body>
+                                    <Panel.Footer style={{textAlign: 'right', backgroundColor: 'white'}}>
+                                        <Button
+                                            style={{marginRight: '5px'}}
+                                            type="button"
+                                            disabled={pristine || submitting}
+                                            onClick={this.resetNewBookData}
+                                            bsStyle="default">
+                                            Очистити
+                                        </Button>
+                                        <Button
+                                            type="submit"
+                                            disabled={pristine || submitting}
+                                            bsStyle="success">
+                                            Зберегти
+                                        </Button>
+                                    </Panel.Footer>
+                                </Preloader>
                             </Panel.Collapse>
                         </Panel>
                     </form>

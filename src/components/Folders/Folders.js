@@ -32,6 +32,7 @@ import {getCurrentDate} from '../../redux/helpers'
 import Folder from './Folder'
 import FolderModal from './FolderModal'
 import Preloader from '../common/Preloader'
+import ConfirmModal from '../common/ConfirmModal'
 
 class Folders extends Component {
 
@@ -39,6 +40,8 @@ class Folders extends Component {
         super(props)
         this.state = {
             showModal: false,
+            showConfirmModal: false,
+            itemToDeleteId: null,
             currentPath: ''
         }
         this.openModal = this.openModal.bind(this)
@@ -48,6 +51,8 @@ class Folders extends Component {
         this.goBack = this.goBack.bind(this)
         this.deleteFolder = this.deleteFolder.bind(this)
         this.moveFolder = this.moveFolder.bind(this)
+        this.openConfirmModal = this.openConfirmModal.bind(this)
+        this.closeConfirmModal = this.closeConfirmModal.bind(this)
     }
 
     createFolder() {
@@ -68,6 +73,7 @@ class Folders extends Component {
     }
 
     deleteFolder(id) {
+        this.closeConfirmModal()
         this.props.deleteMethod(deleteFolder, id)
     }
 
@@ -121,6 +127,19 @@ class Folders extends Component {
         })
     }
 
+    openConfirmModal(folderId) {
+        this.setState({
+            showConfirmModal: true,
+            itemToDeleteId: folderId
+        })
+    }
+
+    closeConfirmModal() {
+        this.setState({
+            showConfirmModal: false,
+        })
+    }
+
     componentDidMount() {
         this.props.auth.currentUser.id && this.props.getMethod(getFolders, this.props.auth.currentUser.id)
     }
@@ -167,7 +186,7 @@ class Folders extends Component {
                                     folder={item}
                                     onClick={this.setCurrentFolder}
                                     openModal={this.openModal}
-                                    deleteFolder={this.deleteFolder}
+                                    openConfirmModal={this.openConfirmModal}
                                     moveOptions={this.getMoveOptions(item.id)}
                                     moveFolder={this.moveFolder}
                                     higherLevelFolder={this.props.folders.currentFolder && this.props.folders.currentFolder.idParentFolder}
@@ -179,6 +198,12 @@ class Folders extends Component {
                     showModal={this.state.showModal}
                     modalCloseHandler={this.closeModal}
                     size="small"
+                />
+                <ConfirmModal
+                    show={this.state.showConfirmModal}
+                    modalCloseHandler={this.closeConfirmModal}
+                    modalSubmitHandler={this.deleteFolder}
+                    itemToDeleteId={this.state.itemToDeleteId}
                 />
             </Col>
         </Preloader>

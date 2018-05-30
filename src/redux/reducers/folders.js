@@ -48,7 +48,6 @@ const folders = (state = {
             })
 
         case ADD_FOLDER_SUCCESS:
-            console.log('REDUCER ADD FOLDER', action.body)
             return Object.assign({}, state, {
                 isAdding: false,
                 items: addItem(state.items, action)
@@ -60,7 +59,6 @@ const folders = (state = {
             })
 
         case DELETE_FOLDER_SUCCESS:
-            console.log('DELETE FOLDER', removeItem(state.items, action))
             return Object.assign({}, state, {
                 items: removeItem(state.items, action)
             })

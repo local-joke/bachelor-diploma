@@ -22,7 +22,6 @@ class App extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('APP', nextProps.auth.isAuthenticated)
         if (this.props.auth.isAuthenticated !== nextProps.auth.isAuthenticated) {
             if (nextProps.auth.isAuthenticated) {
                 let body = {
@@ -36,7 +35,6 @@ class App extends Component {
 
     render() {
         return (
-            <Preloader isLoading={this.props.auth.isFetching}>
                 <Router>
                     <Switch>
                         <Route path='/signUp' component={Registration}/>
@@ -47,7 +45,6 @@ class App extends Component {
                         />
                     </Switch>
                 </Router>
-            </Preloader>
         );
     }
 }

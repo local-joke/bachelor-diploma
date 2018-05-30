@@ -8,6 +8,17 @@
     color: white;
 }
 
+.userPic-small{
+    width:25px;
+    height:25px;
+    border: 2px solid;
+    border-radius: 15px;
+    display: inline-block;
+    margin-right: 10px;
+    background-color: white;
+    z-index: 2002;
+}
+
 .customLink:hover {
     text-decoration-line: none;
     color: lightgrey;

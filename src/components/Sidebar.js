@@ -20,34 +20,51 @@ import {
     signOut
 } from '../redux/actions/auth'
 
-const links = [
-    {
-        path: '/profile',
-        text: 'Мій профіль'
-    },
-    {
-        path: '/notes',
-        text: 'Нотатки'
-    },
-    {
-        path: '/books',
-        text: 'Книги'
-    },
-    {
-        path: '/documents',
-        text: 'Документи'
-    },
-    {
-        path: '/images',
-        text: 'Зображення'
-    },
-]
+const getUserpicSrc = (user) => {
+    (user && user.ImageURL) ? user.ImageURL : 'http://marketline.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png'
+}
 
 class Sidebar extends Component {
 
     constructor(props) {
         super(props)
 
+        this.state = {
+            links: [
+                {
+                    path: '/profile',
+                    text: <li>
+                        <img src={getUserpicSrc(this.props.currentUser)} className="userPic-small" width="25px"
+                             height='25px'/>
+                        Мій профіль
+                    </li>
+                },
+                {
+                    path: '/notes',
+                    text: 'Нотатки'
+                },
+                {
+                    path: '/books',
+                    text: 'Книги'
+                },
+                {
+                    path: '/documents',
+                    text: 'Документи'
+                },
+                {
+                    path: '/images',
+                    text: 'Зображення'
+                },
+                {
+                    path: '/login',
+                    text:  <div onClick={() => this.props.signOut()}>
+                        <Glyphicon glyph="log-out" style={{marginRight: '10px'}} onClick={this.signOut}/>
+                        Вийти
+                    </div>
+                }
+            ]
+
+        }
         this.signOut = this.signOut.bind(this)
     }
 
@@ -64,21 +81,16 @@ class Sidebar extends Component {
         return <div id="sidebar-menu" className='sideBarMenuContainer'>
             <Navbar fluid className='sidebar' inverse>
 
-                <Navbar.Header>
+                <Navbar.Header style={{paddingBottom: '10px'}}>
                     <Navbar.Brand>
-                        <a href="/">ПЕРСОНАЛЬНИЙ ДОВІДНИК</a>
+                        <a href="/" style={{fontSize: '15px'}}>ПЕРСОНАЛЬНИЙ ДОВІДНИК</a>
                     </Navbar.Brand>
                     <Navbar.Toggle/>
                 </Navbar.Header>
-
                 <Navbar.Collapse>
-                    <Navbar.Text className='userMenu'>
-                        <Navbar.Link href="/notes"><Glyphicon glyph="home"/></Navbar.Link>
-                        <Navbar.Link><Glyphicon glyph="log-out" onClick={this.signOut}/></Navbar.Link>
-                    </Navbar.Text>
-                    <Nav>
-                        {links.map((link, index) => (
-                            <NavItem eventKey={index + 1}>
+                    <Nav style={{marginTop: '10px'}}>
+                        {this.state.links.map((link, index) => (
+                            <NavItem eventKey={index + 1} key={index}>
                                 <Link to={link.path} className="customLink">
                                     {link.text}
                                 </Link>

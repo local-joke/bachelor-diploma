@@ -24,7 +24,6 @@ function currentFile( state = {
             })
 
         case SET_DROPPED_FILE:
-            console.log('REDUCER', action.file)
             return Object.assign({}, state, {
                 droppedFile: action.file
             })

@@ -52,7 +52,6 @@ export function deleteFolder(id) {
 }
 
 export function editFolder(body) {
-    console.log('ACTION', body)
     return {
         types: [EDIT_FOLDER, EDIT_FOLDER_SUCCESS, FOLDERS_FAILURE],
         endpoint: 'PutFolder?id=',

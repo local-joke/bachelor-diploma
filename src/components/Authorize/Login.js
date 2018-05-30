@@ -33,13 +33,11 @@ class Login extends Component {
     }
 
     handleSubmit(values){
-        console.log(values)
         let body = {
             Login: values.Login,
             Password: values.Password,
             isAuthenticated: false
         }
-        console.log('FORM DATA', body)
         this.props.postMethod(signIn, body)
     }
 

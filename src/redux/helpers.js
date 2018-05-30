@@ -46,7 +46,6 @@ export function getCurrentDate() {
     let seconds = date.getSeconds()
 
     let result = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds
-    console.log('DATE RESULT', result)
     return result
 
 }

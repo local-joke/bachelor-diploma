@@ -30,7 +30,6 @@ export function deleteBook(id) {
 }
 
 export function editBook(body) {
-    console.log('ACTION', body)
     return {
         types: [EDIT_BOOK, EDIT_BOOK_SUCCESS, BOOK_FAILURE],
         endpoint: 'PutBook?id=',

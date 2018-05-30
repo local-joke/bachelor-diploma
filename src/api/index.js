@@ -26,13 +26,11 @@ export function postMethod(action, body) {
         dispatch({type: actionObject.types[0]})
         axios.post(apiURL + actionObject.endpoint, body)
             .then((response) => {
-                console.log('POST', response.data)
                 if (response.data.message) {
                     alert(response.data.message)
                 }
                 else {
                     if ((actionObject.types[1] === 'SIGN_UP_USER_SUCCESS') || (actionObject.types[1] === 'SIGN_IN_USER_SUCCESS')) {
-                        console.log('POST SIGN UP', response.data)
                         localStorage.setItem('user_name', response.data.user.Login)
                         localStorage.setItem('access_token', response.data.access_token)
                     }

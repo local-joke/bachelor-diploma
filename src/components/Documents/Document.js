@@ -53,12 +53,11 @@ export default class Document extends Component {
             moveDocument,
             moveOptions,
             higherLevelFolder,
+            openConfirmModal,
             openModal
         } = this.props
 
         let imagesMode = false
-
-        console.log('render doc', doc)
 
         let previewText = (doc.Name && ((doc.Name.length > 16) ? doc.Name.substr(0, 13) + '...' : doc.Name))
 
@@ -72,7 +71,7 @@ export default class Document extends Component {
             trigger="click"
             rootClose
             placement="bottom"
-            overlay={popover(doc, deleteDocument, moveDocument, moveOptions, higherLevelFolder, imagesMode)}
+            overlay={popover(doc, openConfirmModal, moveDocument, moveOptions, higherLevelFolder, imagesMode)}
         >
             <Glyphicon
                 glyph="option-horizontal"

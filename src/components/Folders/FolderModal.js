@@ -40,7 +40,6 @@ class FolderModal extends Component {
             DateOfChange: getCurrentDate(),
             Name: values.Name
         }
-        console.log(body)
         this.props.putMethod(editFolder, body)
         this.props.modalCloseHandler()
     }

@@ -47,7 +47,6 @@ class ImagesViewer extends Component {
     }
 
     openLightbox(event, index) {
-        console.log('LIGHTBOX', index)
         this.props.setCurrentFile(index)
         this.setState({
             lightboxIsOpen: true
@@ -64,7 +63,6 @@ class ImagesViewer extends Component {
     getImages() {
         let images = [];
         this.props.documents.items && this.props.documents.items.forEach((doc) => {
-            console.log('doc', doc)
             if (doc.idFolder === this.props.currentFolder) {
                 if ((doc.Type === 'png') || (doc.Type === 'jpg')) {
                     images.push({

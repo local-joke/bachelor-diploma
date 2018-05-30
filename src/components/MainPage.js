@@ -5,13 +5,17 @@ import {
 } from 'react-bootstrap'
 import '../styles/MainPage.css'
 import {Route, Link} from "react-router-dom";
+import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import Sidebar from './Sidebar'
+import Preloader from './common/Preloader'
 
 class MainPage extends Component {
 
     render() {
-        return <Col xs={12}>
+        let className = (this.props.location.pathname === '/profile') ? 'items-background-profile' : 'items-background'
+        return <Preloader isLoading={this.props.auth.isFetching}>
+        <Col xs={12}>
             <Row>
                 <Col xs={12}>
                     <Row>
@@ -19,7 +23,7 @@ class MainPage extends Component {
                     </Row>
                 </Col>
                 <Col xs={12}>
-                    <Row className="items-background">
+                    <Row className={className}>
                         {this.props.routes.map((route, i) => <Route
                             key={i}
                             path={route.path}
@@ -29,8 +33,14 @@ class MainPage extends Component {
                 </Col>
             </Row>
         </Col>
+        </Preloader>
     }
 }
 
+function mapStateToProps(state) {
+    return {
+        auth: state.auth
+    }
+}
 
-export default withRouter(MainPage)
+export default withRouter(connect(mapStateToProps)(MainPage))

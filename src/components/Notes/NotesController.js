@@ -9,7 +9,6 @@ import {
     Panel
 } from 'react-bootstrap'
 import '../../styles/notes.css'
-import moment from 'moment'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import {
@@ -38,8 +37,8 @@ const Note = (props) => {
     let isImportant = (note.IsImportant === 1)
 
     return <Fade in>
-        <div className={className}>
-            <div onClick={() => openModal(note.id)}>
+        <div className={className} onClick={() => openModal(note.id)}>
+            <div>
                 {previewText}
             </div>
             <Glyphicon
@@ -121,7 +120,6 @@ class NotesController extends Component {
             HeaderText: checkString(values.HeaderText),
             NoteText: values.NoteText
         }
-        console.log('SUBMIT BODY', body)
         this.props.postMethod(addNote, body)
         this.props.reset()
     }
@@ -160,7 +158,7 @@ class NotesController extends Component {
                         <Panel id="collapsible-panel-example-2" defaultExpanded>
                             <Panel.Heading style={{backgroundColor: 'white'}}>
                                 <Panel.Title toggle>
-                                    Создать заметку
+                                    Створити нотаток
                                 </Panel.Title>
                             </Panel.Heading>
                             <Panel.Collapse>
@@ -174,26 +172,21 @@ class NotesController extends Component {
                                         disabled={pristine || submitting}
                                         onClick={reset}
                                         bsStyle="default">
-                                        Очистить
+                                        Очистити
                                     </Button>
                                     <Button
                                         type="submit"
                                         disabled={pristine || submitting}
                                         bsStyle="success">
-                                        Сохранить
+                                        Зберегти
                                     </Button>
                                 </Panel.Footer>
                             </Panel.Collapse>
                         </Panel>
                     </form>
                 </Row>
-                {/*<CSSTransition
-                timeout={300}
-              classNames="example"
-              unmountOnExit
-              >*/}
                 {(this.importantExists()) && <Row>
-                    <ControlLabel>Важные</ControlLabel>
+                    <ControlLabel>Важливі</ControlLabel>
                     <div>
                         {notes.items && notes.items.map((note, key) => {
                             if (note.IsImportant) {
@@ -211,15 +204,10 @@ class NotesController extends Component {
                         })}
                     </div>
                 </Row>}
-                {/* </CSSTransition>*/}
                 <Row>
                     {!this.isEverythingImportant() &&
                     <div>
-                        <ControlLabel>Все заметки</ControlLabel>
-                        {/*<CSSTransitionGroup
-                        transitionName="example"
-                        transitionEnterTimeout={500}
-                        transitionLeaveTimeout={300}>*/}
+                        <ControlLabel>Усі нотатки</ControlLabel>
                         <div>
                             {notes.items && notes.items.map((note, key) => {
                                 if (!note.IsImportant) {
@@ -236,7 +224,6 @@ class NotesController extends Component {
                                 }
                             })}
                         </div>
-                        {/*</CSSTransitionGroup>*/}
                     </div>
                     }
                 </Row>

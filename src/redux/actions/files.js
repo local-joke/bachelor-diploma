@@ -37,7 +37,6 @@ export function deleteFile(actionTypes, controllerName, fileId){
 }
 
 export function setDroppedFile(file) {
-    console.log('SET DROPPED FILE', file)
     return {
         type: SET_DROPPED_FILE,
         file

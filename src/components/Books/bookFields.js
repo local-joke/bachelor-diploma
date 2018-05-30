@@ -11,15 +11,15 @@ export function bookFields() {
         <Field
             name="Title"
             component={formInput}
-            placeholder="Введите название"
+            placeholder="Введіть назву"
             type="text"
             validate={[maxLength100, required]}
-            label="Название"
+            label="Назва"
         />
         <Field
             name="Author"
             component={formInput}
-            placeholder="Введите имя автора"
+            placeholder="Введіть ім'я автора"
             type="text"
             validate={maxLength45}
             label="Автор"
@@ -27,19 +27,19 @@ export function bookFields() {
         <Field
             name="Publisher"
             component={formInput}
-            placeholder="Введите название издательства"
+            placeholder="Введіть назву видавництва"
             type="text"
             validate={maxLength45}
-            label="Издательство"
+            label="Видавництво"
         />
         <Field
             name="Year"
             component={formInput}
-            placeholder="Введите год написания"
+            placeholder="Введіть рік написання"
             type="text"
             validate={maxLength4}
             normalize={value => !/[^0-9]/.test(value) ? value : ''}
-            label="Год"
+            label="Рік"
         />
     </div>
 }

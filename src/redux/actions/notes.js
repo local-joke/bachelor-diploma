@@ -50,7 +50,6 @@ export function deleteNote(id) {
 }
 
 export function editNote(body) {
-    console.log('ACTION', body)
     return {
         types: [EDIT_NOTE, EDIT_NOTE_SUCCESS, NOTES_FAILURE],
         endpoint: 'PutNote?id=',

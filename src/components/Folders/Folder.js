@@ -15,7 +15,7 @@ import {
 } from 'react-bootstrap'
 import '../../styles/notes.css'
 
-const popover = (folder, moveOptions, deleteFolder, openModal, moveFolder, higherLevelFolder) => (
+const popover = (folder, moveOptions, openConfirmModal, openModal, moveFolder, higherLevelFolder) => (
     <Popover id="popover-positioned-scrolling-right" style={{width: '500px'}}>
         <ControlLabel>Переместить:</ControlLabel>
         <ListGroup>
@@ -43,7 +43,7 @@ const popover = (folder, moveOptions, deleteFolder, openModal, moveFolder, highe
             <Button
                 bsStyle='danger'
                 style={{marginRight: '5px'}}
-                onClick={() => deleteFolder(folder.id)}
+                onClick={() => openConfirmModal(folder.id)}
             >
                 Удалить
             </Button>
@@ -60,7 +60,7 @@ const popover = (folder, moveOptions, deleteFolder, openModal, moveFolder, highe
 export default class Folder extends Component {
 
     render() {
-        let {folder, moveOptions} = this.props
+        let {folder, moveOptions, openConfirmModal, openModal, moveFolder, higherLevelFolder} = this.props
         return <div className='folder'>
             <div onClick={() => this.props.onClick(folder)}>
                 <div className='iconContainer'>
@@ -79,10 +79,10 @@ export default class Folder extends Component {
                 overlay={popover(
                     folder,
                     moveOptions,
-                    this.props.deleteFolder,
-                    this.props.openModal,
-                    this.props.moveFolder,
-                    this.props.higherLevelFolder,
+                    openConfirmModal,
+                    openModal,
+                    moveFolder,
+                    higherLevelFolder,
                 )}
             >
                 <Glyphicon

@@ -41,6 +41,7 @@ import Document from './Document'
 import Folders from '../Folders/Folders'
 import Preloader from '../common/Preloader'
 import Drop from './Drop'
+import ConfirmModal from '../common/ConfirmModal'
 
 class DocumentsController extends Component {
 
@@ -48,7 +49,8 @@ class DocumentsController extends Component {
         super(props)
         this.state = {
             showModal: false,
-            docTypes: []
+            showConfirmModal: false,
+            itemToDeleteId: null
         }
         this.addDocumentHandler = this.addDocumentHandler.bind(this);
         this.deleteDocument = this.deleteDocument.bind(this)
@@ -57,6 +59,8 @@ class DocumentsController extends Component {
         this.onDrop = this.onDrop.bind(this)
         this.clearDrop = this.clearDrop.bind(this)
         this.moveDocument = this.moveDocument.bind(this)
+        this.openConfirmModal = this.openConfirmModal.bind(this)
+        this.closeConfirmModal = this.closeConfirmModal.bind(this)
     }
 
     moveDocument(document, destinationFolderId) {
@@ -65,7 +69,6 @@ class DocumentsController extends Component {
             idFolder: destinationFolderId,
             DateOfChange: getCurrentDate(),
         }
-        console.log('put', document)
         this.props.putMethod(editDocument, body)
     }
 
@@ -86,6 +89,19 @@ class DocumentsController extends Component {
         this.props.clearCurrentFile()
         this.setState({
             showModal: false
+        })
+    }
+
+    openConfirmModal(docId) {
+        this.setState({
+            showConfirmModal: true,
+            itemToDeleteId: docId
+        })
+    }
+
+    closeConfirmModal() {
+        this.setState({
+            showConfirmModal: false,
         })
     }
 
@@ -112,7 +128,6 @@ class DocumentsController extends Component {
 
             }
             formData.append('fileInfo', JSON.stringify(body))
-            console.log('FORM DATA', body)
             this.props.postMethod(addDocument, formData)
             this.props.clearDroppedFile()
         }
@@ -122,7 +137,7 @@ class DocumentsController extends Component {
     }
 
     deleteDocument(id) {
-        console.log('DELETE', id)
+        this.closeConfirmModal()
         this.props.deleteMethod(deleteDocument, id)
     }
 
@@ -175,7 +190,7 @@ class DocumentsController extends Component {
                                             key={key}
                                             openModal={this.openModal}
                                             doc={doc}
-                                            deleteDocument={this.deleteDocument}
+                                            openConfirmModal={this.openConfirmModal}
                                             moveOptions={this.getMoveOptions()}
                                             moveDocument={this.moveDocument}
                                             higherLevelFolder={this.props.folders.currentFolder && this.props.folders.currentFolder.idParentFolder}
@@ -188,6 +203,12 @@ class DocumentsController extends Component {
                     size="large"
                     show={this.state.showModal}
                     modalCloseHandler={this.closeModal}
+                />
+                <ConfirmModal
+                    show={this.state.showConfirmModal}
+                    modalCloseHandler={this.closeConfirmModal}
+                    modalSubmitHandler={this.deleteDocument}
+                    itemToDeleteId={this.state.itemToDeleteId}
                 />
             </Col>
         </Preloader>

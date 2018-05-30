@@ -42,7 +42,6 @@ class BookModal extends Component {
             Publisher: checkString(values.Publisher),
             Year: checkString(values.Year),
         }
-        console.log(body)
         this.props.putMethod(editBook, body)
         this.props.modalCloseHandler()
     }

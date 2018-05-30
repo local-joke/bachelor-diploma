@@ -47,7 +47,6 @@ const books = (state = {
                     book = item
                 }
             })
-            console.log('REDUCER book', book)
             return Object.assign({}, state, {
                 currentBook: book
             });

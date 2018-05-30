@@ -14,7 +14,7 @@ import {
     deleteNote,
     editNote,
 } from '../../redux/actions/notes'
-import { deleteMethod, putMethod } from '../../api/index'
+import {deleteMethod, putMethod} from '../../api/index'
 import {getCurrentDate} from '../../redux/helpers'
 import {checkString} from "../../redux/helpers"
 
@@ -43,52 +43,55 @@ class NoteModal extends Component {
             HeaderText: checkString(values.HeaderText),
             NoteText: values.NoteText
         }
-        console.log(body)
         this.props.putMethod(editNote, body)
         this.props.modalCloseHandler()
     }
 
-    deleteNote(){
+    deleteNote() {
         this.props.deleteMethod(deleteNote, this.props.initialValues.id)
         this.props.modalCloseHandler()
     }
 
     render() {
         const {
-            handleSubmit, pristine, submitting, invalid,
+            handleSubmit, pristine, submitting, invalid, initialValues,
             showModal, size
         } = this.props;
 
         return <Modal show={showModal} size={size} onHide={this.handleHide} className="note-modal">
             <form onSubmit={handleSubmit(this.handleSubmit)}>
-            <Modal.Body style={{height: '400px'}}>
-                {noteFields()}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button
-                    style={{marginLeft: '5px', float: 'left'}}
-                    type="button"
-                    bsStyle='danger'
-                    onClick={this.deleteNote}
-                >
-                    Удалить
-                </Button>
-                <Button
-                    type="button"
-                    disabled={pristine || submitting}
-                    bsStyle='default'
-                    onClick={this.handleHide}
-                >
-                    Отменить
-                </Button>
-                <Button
-                    type="submit"
-                    disabled={pristine || invalid || submitting}
-                    bsStyle='success'
-                >
-                    Сохранить
-                </Button>
-            </Modal.Footer>
+                <Modal.Body style={{height: '350px'}}>
+                    <div>
+                        {noteFields()}
+                        <h4>Дата створення: {initialValues && moment(initialValues.DateOfCreation).format('YYYY.MM.DD HH:mm:ss')}</h4>
+                        <h4>Дата зміни: {initialValues && moment(initialValues.DateOfChange).format('YYYY.MM.DD HH:mm:ss')}</h4>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        style={{marginLeft: '5px', float: 'left'}}
+                        type="button"
+                        bsStyle='danger'
+                        onClick={this.deleteNote}
+                    >
+                        Удалить
+                    </Button>
+                    <Button
+                        type="button"
+                        disabled={pristine || submitting}
+                        bsStyle='default'
+                        onClick={this.handleHide}
+                    >
+                        Отменить
+                    </Button>
+                    <Button
+                        type="submit"
+                        disabled={pristine || invalid || submitting}
+                        bsStyle='success'
+                    >
+                        Сохранить
+                    </Button>
+                </Modal.Footer>
             </form>
         </Modal>
     }
@@ -107,10 +110,10 @@ NoteModal = reduxForm({
     enableReinitialize: true
 })(NoteModal)
 
-NoteModal = connect( state => ({
+NoteModal = connect(state => ({
     auth: state.auth,
     initialValues: state.notes.currentNote
-}), mapDispatchToProps )((NoteModal))
+}), mapDispatchToProps)((NoteModal))
 
 export default NoteModal
 

@@ -13,16 +13,16 @@ import {
     Panel
 } from 'react-bootstrap'
 import '../../styles/notes.css'
+import moment from 'moment'
 
-const popover = (doc, deleteDocument, moveDocument, moveOptions, higherLevelFolder, imagesMode) => {
-    console.log('moveOptions', moveOptions)
+const popover = (doc, openConfirmModal, moveDocument, moveOptions, higherLevelFolder, imagesMode) => {
     return <Popover id="popover-positioned-scrolling-right" style={{width: '500px'}}>
         {!imagesMode && <div><ControlLabel>Название:</ControlLabel>
             <div>{doc.Name}</div>
             <ControlLabel>Тип:</ControlLabel>
             <div>{doc.Type}</div>
             <ControlLabel>Дата создания:</ControlLabel>
-            <div>{doc.DateOfCreation}</div>
+            <div>{moment(doc.DateOfCreation).format('YYYY.MM.DD HH:mm:ss')}</div>
         </div>
         }
         <ControlLabel>Переместить:</ControlLabel>
@@ -51,9 +51,9 @@ const popover = (doc, deleteDocument, moveDocument, moveOptions, higherLevelFold
             <Button
                 bsStyle='danger'
                 style={{marginRight: '5px'}}
-                onClick={() => deleteDocument(doc.id)}
+                onClick={() => openConfirmModal(doc.id)}
             >
-                Удалить
+                Видалити
             </Button>
             <Button
                 bsStyle='primary'

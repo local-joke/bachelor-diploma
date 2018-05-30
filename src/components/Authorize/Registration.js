@@ -46,7 +46,6 @@ class Registration extends Component {
     }
 
     handleSubmit(values){
-        console.log(values)
         if(values.Password !== values.PasswordRepeat){
             throw new SubmissionError({
                 PasswordRepeat: 'Паролі мають співпадати!',
@@ -60,7 +59,6 @@ class Registration extends Component {
                 Name: values.Name,
                 Email: values.Email,
             }
-            console.log('FORM DATA', body)
             this.props.postMethod(signUp, body)
             this.props.clearFields()
         }

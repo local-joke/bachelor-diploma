@@ -19,7 +19,6 @@ const renderComponent = (file) => {
             }
         })
         if (checkType) {
-            console.log('FILE', file)
             return <FileViewer
                 fileType={file.Type}
                 filePath={file.URL}

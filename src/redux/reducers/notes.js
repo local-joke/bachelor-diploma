@@ -49,7 +49,6 @@ const notes = (state = {
                     note = item
                 }
             })
-            console.log('REDUCER note', note)
             return Object.assign({}, state, {
                 currentNote: note
             });
@@ -71,7 +70,6 @@ const notes = (state = {
             })
 
         case DELETE_NOTE_SUCCESS:
-            console.log('DELETE NOTE',removeItem(state.items, action))
             return Object.assign({}, state, {
                 items: removeItem(state.items, action)
             })

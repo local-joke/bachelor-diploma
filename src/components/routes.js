@@ -11,11 +11,11 @@ export const RouteWithSubRoutes = props => {
         path={props.route.path}
         render={() => (
             props.isAuthenticated ?
-            <props.route.component routes={props.route.routes}/>
+                <props.route.component routes={props.route.routes}/>
                 : <Redirect
                     to={{
                         pathname: "/login",
-                        state: { from: props.location }
+                        state: {from: props.location}
                     }}
                 />
 
@@ -33,7 +33,7 @@ export const routes = [
                 path: '/profile',
                 component: UserProfile
             },
-           {
+            {
                 path: "/notes",
                 component: NotesController
             },

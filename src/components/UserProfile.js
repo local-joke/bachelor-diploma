@@ -11,50 +11,56 @@ import {
 import '../styles/profile.css'
 import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {bindActionCreators} from 'redux'
-import {
-    //api
-    signOut
-} from '../redux/actions/auth'
 import Preloader from './common/Preloader'
 
 class UserProfile extends Component {
+
     render() {
 
         let {currentUser} = this.props
 
+        let userPic = currentUser.ImageURL ? currentUser.ImageURL : 'http://marketline.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png'
+
         return <Preloader isLoading={this.props.auth.isFetching}>
-            <Col xs={12}>
+            <Col xs={12} className="profile">
                 <Row>
                     <Panel id="collapsible-panel-example-2">
-                        <Panel.Heading style={{backgroundColor: 'white'}}>
+                        <Panel.Heading style={{backgroundColor: 'white', textAlign: 'center'}}>
                             <Panel.Title toggle>
                                 Профіль користувача
                             </Panel.Title>
                         </Panel.Heading>
                         <Panel.Body>
-                            {currentUser && <div className="userPic">
-                                <img src={currentUser.ImageURL} ></img>
-                            </div>}
+                            {currentUser &&
+                            <Col xs={12}>
+                                <Row>
+                                    <Col xs={12} sm={4}>
+                                        <Row>
+                                            <img src={userPic} className="userPic" width="100px" height='100px'/>
+                                        </Row>
+                                    </Col>
+                                    <Col xs={12} sm={8}>
+                                        <Row>
+                                            <div>
+                                                <ControlLabel>Логін: {currentUser.Login}</ControlLabel>
+                                            </div>
+                                            <div>
+                                                <ControlLabel>E-mail: {currentUser.Email}</ControlLabel>
+                                            </div>
+                                            <div>
+                                                <ControlLabel>Ім'я: {currentUser.Name}</ControlLabel>
+                                            </div>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            }
                         </Panel.Body>
-                        <Panel.Footer style={{textAlign: 'right', backgroundColor: 'white'}}>
-                            <Button
-                                type="submit"
-                                bsStyle="danger">
-                                Вийти
-                            </Button>
-                        </Panel.Footer>
                     </Panel>
                 </Row>
             </Col>
         </Preloader>
     }
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        signOut
-    }, dispatch)
 }
 
 function mapStateToProps(state) {
@@ -64,4 +70,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserProfile))
+export default withRouter(connect(mapStateToProps)(UserProfile))
